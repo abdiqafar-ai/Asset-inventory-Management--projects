@@ -1,0 +1,90 @@
+/* Navbar background color */
+.navbar {
+    background-color: #0077b6 !important;
+}
+
+/* Logo Styling */
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffffff !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Hover effect for navbar links */
+.navbar-nav .nav-item .btn {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Hover effect when mouse is over the navigation buttons */
+.navbar-nav .nav-item .btn:hover {
+    background-color: #000000;  /* Black background on hover */
+    color: #ffffff;  /* White text color on hover */
+}
+
+/* Styling the 'Logout' button for special emphasis */
+.navbar-nav .nav-item .btn-outline-danger {
+    border-color: #fb8500;
+    color: #fb8500;
+}
+
+.navbar-nav .nav-item .btn-outline-danger:hover {
+    background-color: #fb8500;
+    color: #ffffff;
+}
+
+/* Add a little padding around each button */
+.navbar-nav .nav-item .btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+}
+
+/* Ensure the navbar links have space between them */
+.navbar-nav .nav-item {
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+/* Adjust the button colors on hover for .btn-outline-light */
+.navbar-nav .nav-item .btn-outline-light {
+    color: #ffffff !important;
+    border-color: #ffffff;
+}
+
+.navbar-nav .nav-item .btn-outline-light:hover {
+    background-color: #ffffff;
+    color: #023047;
+}
+
+/* Additional hover effect to make sure other button variants are styled properly */
+.navbar-nav .nav-item .btn-outline-dark {
+    border-color: #000000;
+    color: #000000;
+}
+
+.navbar-nav .nav-item .btn-outline-dark:hover {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+/* On smaller screens, make sure the navbar links stack vertically */
+@media (max-width: 992px) {
+    .navbar-nav {
+        text-align: center;
+        width: 100%;
+    }
+
+    .navbar-nav .nav-item {
+        margin-left: 0;
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .navbar-brand {
+        text-align: center;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
