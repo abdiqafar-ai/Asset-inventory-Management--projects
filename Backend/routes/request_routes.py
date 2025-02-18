@@ -1,15 +1,20 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from models import Request, db
+from models import db, AssetRequest
 
-request_bp = Blueprint('requests', __name__)
+request_routes = Blueprint("request_routes", __name__)
 
-@request_bp.route('/', methods=['POST'])
+@request_routes.route('/requests', methods=['POST'])
 @jwt_required()
 def create_request():
-    data = request.get_json()
     current_user = get_jwt_identity()
-    new_request = Request(user_id=current_user['id'], asset_id=data.get('asset_id'), request_type=data['request_type'], urgency=data['urgency'], reason=data['reason'])
-    db.session.add(new_request)
+    data = request.json
+    request_entry = AssetRequest(
+        user_id=current_user['id'],
+        asset_name=data['asset_name'],
+        reason=data['reason'],
+        urgency=data['urgency']
+    )
+    db.session.add(request_entry)
     db.session.commit()
-    return jsonify({'message': 'Request created successfully'}), 201
+    return jsonify({"message": "Request submitted"}), 201

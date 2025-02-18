@@ -1,43 +1,22 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask_migrate import Migrate
+from models import db, bcrypt, jwt
+from routes.auth_routes import auth_routes
+from routes.asset_routes import asset_routes
+from routes.request_routes import request_routes
+from config import Config
 
-# Initialize the SQLAlchemy object
-db = SQLAlchemy()
+app = Flask(__name__)
+app.config.from_object(Config)
 
-# Configuration class for the app
-class Config:
-    SECRET_KEY = 'your_secret_key'  # Change this to a secure key in production
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
+db.init_app(app)
+bcrypt.init_app(app)
+jwt.init_app(app)
+migrate = Migrate(app, db)
 
-    # PostgreSQL Database Configuration
-    DB_USER = 'postgres'
-    DB_PASSWORD = 'ian imbuga 123'  # Ensure there are no spaces in the actual password
-    DB_HOST = 'localhost'
-    DB_PORT = '5432'
-    DB_NAME = 'asset_inventory_db'
+app.register_blueprint(auth_routes, url_prefix="/api/auth")
+app.register_blueprint(asset_routes, url_prefix="/api/assets")
+app.register_blueprint(request_routes, url_prefix="/api/requests")
 
-    SQLALCHEMY_DATABASE_URI = f'postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
-
-def create_app():
-    app = Flask(__name__)
-    
-    # Apply the configuration settings
-    app.config.from_object(Config)
-    
-    # Initialize the SQLAlchemy object with the app
-    db.init_app(app)
-    
-    return app
-
-# Initialize Flask app
-app = create_app()
-
-# Test route for the app
-@app.route('/')
-def index():
-    return "Welcome to the Asset Inventory Management System!"
-
-# Run the Flask app
 if __name__ == "__main__":
     app.run(debug=True)
