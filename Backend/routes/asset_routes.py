@@ -1,24 +1,39 @@
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import jwt_required, get_jwt_identity
-from models import db, Asset, User
+from models import db, Category, Asset
 
-asset_routes = Blueprint("asset_routes", __name__)
+asset_bp = Blueprint('asset_bp', __name__)
 
-@asset_routes.route('/assets', methods=['GET'])
-@jwt_required()
-def get_assets():
-    assets = Asset.query.all()
-    return jsonify([{"id": a.id, "name": a.name, "category": a.category, "status": a.status} for a in assets])
-
-@asset_routes.route('/assets', methods=['POST'])
-@jwt_required()
-def create_asset():
-    current_user = get_jwt_identity()
-    if current_user['role'] != "procurement_manager":
-        return jsonify({"error": "Unauthorized"}), 403
-
-    data = request.json
-    asset = Asset(name=data['name'], category=data['category'], image_url=data.get('image_url'))
-    db.session.add(asset)
+@asset_bp.route('/add', methods=['POST'])
+def add_asset():
+    data = request.get_json()
+    
+    category = Category.query.filter_by(id=data['category_id']).first()
+    if not category:
+        return jsonify({"message": "Category not found"}), 404
+    
+    new_asset = Asset(
+        name=data['name'],
+        description=data['description'],
+        status=data['status'],
+        image_url=data['image_url'],
+        category_id=data['category_id'],
+        allocated_to=data.get('allocated_to')
+    )
+    
+    db.session.add(new_asset)
     db.session.commit()
-    return jsonify({"message": "Asset added"}), 201
+    
+    return jsonify({"message": "Asset added successfully"}), 201
+
+@asset_bp.route('/categories', methods=['POST'])
+def add_category():
+    data = request.get_json()
+    
+    new_category = Category(
+        name=data['name']
+    )
+    
+    db.session.add(new_category)
+    db.session.commit()
+    
+    return jsonify({"message": "Category added successfully"}), 201
