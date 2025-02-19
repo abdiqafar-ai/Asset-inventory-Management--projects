@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../actions/authActions';
 import { Link } from 'react-router-dom';
 import { Navbar, Nav, Button, Container } from 'react-bootstrap';
-
+import './Navbar.css';
 
 const NavbarComponent = () => {
   const { isAuthenticated, role } = useSelector((state) => state.auth);
@@ -28,7 +28,7 @@ const NavbarComponent = () => {
 
         {/* Navbar Links */}
         <Navbar.Collapse id="navbar-nav">
-          <Nav className="ml-auto d-flex flex-row" style={{ marginLeft: 'auto', marginRight: '20px' }}> {/* Add marginRight for slight left shift */}
+          <Nav className="ml-auto d-flex flex-row" style={{ marginLeft: 'auto', marginRight: '20px' }}>
             {isAuthenticated ? (
               <>
                 <Nav.Item className="mx-3">
@@ -49,29 +49,18 @@ const NavbarComponent = () => {
                   </Button>
                 </Nav.Item>
               </>
-            ) : (
-              <>
-                <Nav.Item className="mx-3">
-                  <Button variant="outline-light" as={Link} to="/login" className="font-weight-bold text-white">
-                    Login
-                  </Button>
-                </Nav.Item>
-                <Nav.Item className="mx-3">
-                  <Button variant="outline-light" as={Link} to="/signup" className="font-weight-bold text-white">
-                    Sign Up
-                  </Button>
-                </Nav.Item>
-              </>
-            )}
+            ) : null}
+
+            {/* About Us and Contact Us Buttons */}
             <Nav.Item className="mx-3">
               <Button variant="outline-light" as={Link} to="/about" className="font-weight-bold text-white">
                 About Us
               </Button>
             </Nav.Item>
             <Nav.Item className="mx-3">
-              <Button variant="outline-light" as={Link} to="/contact" className="font-weight-bold text-white">
-                Contacts
-              </Button>
+              <a href="#contact" className="contact-nav-link font-weight-bold text-white">
+                Contact Us
+              </a>
             </Nav.Item>
           </Nav>
         </Navbar.Collapse>
