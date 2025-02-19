@@ -43,29 +43,44 @@ class User(db.Model):
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), unique=True, nullable=False)
-    assets = db.relationship("Asset", backref="category", lazy=True)
+    name = db.Column(db.String(50), nullable=False)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name
+        }
 
 class Asset(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.String(255), nullable=True)
-    status = db.Column(db.String(50), nullable=False, default="Available")
-    image_url = db.Column(db.String(255), nullable=True)
-    category_id = db.Column(db.Integer, db.ForeignKey("category.id"), nullable=False)
-    allocated_to = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)  # Assigned employee
-    requests = db.relationship("Request", backref="asset", lazy=True)
+    description = db.Column(db.String(255))
+    status = db.Column(db.String(50), nullable=False)
+    image_url = db.Column(db.String(255))
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
+    allocated_to = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)  # Link to manager
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'status': self.status,
+            'image_url': self.image_url,
+            'category_id': self.category_id,
+            'allocated_to': self.allocated_to 
+        }
 
 class Request(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    asset_id = db.Column(db.Integer, db.ForeignKey("asset.id"), nullable=False)
-    reviewed_by_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)  # Use a different name for the reviewer foreign key
-    request_type = db.Column(db.String(50), nullable=False)  # "new" or "repair"
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    asset_id = db.Column(db.Integer, db.ForeignKey('asset.id'), nullable=False)
+    request_type = db.Column(db.String(50), nullable=False)
     reason = db.Column(db.Text, nullable=False)
-    quantity = db.Column(db.Integer, nullable=False, default=1)
-    urgency = db.Column(db.String(50), nullable=False)  # "low", "medium", "high"
-    status = db.Column(db.Enum(RequestStatus), nullable=False, default=RequestStatus.PENDING)
+    quantity = db.Column(db.Integer, nullable=False)
+    urgency = db.Column(db.String(20), nullable=False)
+    status = db.Column(db.String(20), default="PENDING")
+    reviewed_by_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     
     request_creator = db.relationship("User", foreign_keys=[user_id], lazy=True)
     request_assessor = db.relationship("User", foreign_keys=[reviewed_by_id], lazy=True)
@@ -86,10 +101,11 @@ class Request(db.Model):
             "id": self.id,
             "user_id": self.user_id,
             "asset_id": self.asset_id,
-            "reviewed_by_id": self.reviewed_by_id,
             "request_type": self.request_type,
             "reason": self.reason,
             "quantity": self.quantity,
             "urgency": self.urgency,
-            "status": self.status.name
+            "status": self.status,
+            "reviewed_by_id": self.reviewed_by_id
         }
+    
