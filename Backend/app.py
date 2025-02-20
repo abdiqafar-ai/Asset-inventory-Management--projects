@@ -7,7 +7,8 @@ from routes.auth_routes import auth_routes
 from routes.asset_routes import asset_bp  # Standardized naming
 from routes.request_routes import request_routes
 from routes.user_routes import user_routes
-from routes.notifications_routes import notifications_routes 
+from routes.notifications_routes import notifications_routes
+from routes.activity_logs_routes import activity_logs_routes 
 from config import Config
 
 # Initialize extensions
@@ -30,7 +31,8 @@ def create_app():
     app.register_blueprint(asset_bp, url_prefix="/api/assets")  # Standardized name
     app.register_blueprint(request_routes, url_prefix="/api/requests")
     app.register_blueprint(user_routes, url_prefix="/api")
-    app.register_blueprint(notifications_routes, url_prefix="/api/")  # Consistent URL prefix
+    app.register_blueprint(notifications_routes, url_prefix="/api")  # Consistent URL prefix
+    app.register_blueprint(activity_logs_routes, url_prefix="/api") 
 
     return app
 

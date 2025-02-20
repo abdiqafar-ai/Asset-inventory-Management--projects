@@ -156,3 +156,20 @@ class Notification(db.Model):
             "created_at": self.created_at.strftime("%Y-%m-%d %H:%M:%S"),
         }
 
+class ActivityLog(db.Model):
+    __tablename__ = "activity_logs"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    action = db.Column(db.String(255), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+
+    user = db.relationship("User", backref=db.backref("activity_logs", lazy=True))
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "action": self.action,
+            "timestamp": self.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
+        }
