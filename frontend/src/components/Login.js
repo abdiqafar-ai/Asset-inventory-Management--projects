@@ -22,12 +22,12 @@ const Login = () => {
   };
 
   return (
-    <Container className="d-flex justify-content-center align-items-center vh-100">
-      <div className="login-container p-4 rounded">
-        <h2 className="text-center mb-4">Log In</h2>
+    <Container className="login-container d-flex justify-content-center align-items-center">
+      <div className="login-form-container">
+        <h2 className="mb-4">Log In</h2>
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
           {/* Email Field */}
-          <Form.Group controlId="formEmail" className="mb-3">
+          <Form.Group controlId="formEmail" className="form-group mb-4">
             <Form.Label>Email</Form.Label>
             <Form.Control
               type="email"
@@ -43,7 +43,7 @@ const Login = () => {
           </Form.Group>
 
           {/* Password Field */}
-          <Form.Group controlId="formPassword" className="mb-3">
+          <Form.Group controlId="formPassword" className="form-group mb-4">
             <Form.Label>Password</Form.Label>
             <Form.Control
               type="password"
@@ -58,14 +58,14 @@ const Login = () => {
           </Form.Group>
 
           {/* Forgot Password Link */}
-          <p className="text-center">
+          <p className="forgot-password">
             <a href="/forgot-password" className="text-decoration-none">
               Forgot Password?
             </a>
           </p>
 
           {/* Submit Button */}
-          <Button variant="primary" type="submit" className="w-100">
+          <Button variant="primary" type="submit" className="login-button">
             Log In
           </Button>
         </Form>
