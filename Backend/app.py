@@ -2,6 +2,7 @@ from flask import Flask
 from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS  # Import flask_cors
 from models import db  # Ensuring no circular import
 from routes.auth_routes import auth_routes
 from routes.asset_routes import asset_bp  # Standardized naming
@@ -25,6 +26,9 @@ def create_app():
     bcrypt.init_app(app)
     jwt.init_app(app)
     migrate.init_app(app, db)
+
+    # Initialize CORS
+    CORS(app)
 
     # Register blueprints
     app.register_blueprint(auth_routes, url_prefix="/api/auth")
