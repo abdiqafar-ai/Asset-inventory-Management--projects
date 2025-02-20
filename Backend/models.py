@@ -87,6 +87,8 @@ class Asset(db.Model):
         }
 
 class Request(db.Model):
+    __tablename__ = 'requests'
+    
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     asset_id = db.Column(db.Integer, db.ForeignKey('asset.id'), nullable=False)
@@ -96,20 +98,24 @@ class Request(db.Model):
     urgency = db.Column(db.String(20), nullable=False)
     status = db.Column(db.String(20), default="PENDING")
     reviewed_by_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
     request_creator = db.relationship("User", foreign_keys=[user_id], lazy=True)
     request_assessor = db.relationship("User", foreign_keys=[reviewed_by_id], lazy=True)
 
+    # Relationship with Notifications
+    notifications = db.relationship('Notification', lazy=True)
+
     def approve(self, manager_id):
-        self.status = RequestStatus.APPROVED
+        self.status = "APPROVED"
         self.reviewed_by_id = manager_id
 
     def reject(self, manager_id):
-        self.status = RequestStatus.REJECTED
+        self.status = "REJECTED"
         self.reviewed_by_id = manager_id
 
     def complete(self):
-        self.status = RequestStatus.COMPLETED
+        self.status = "COMPLETED"
 
     def to_dict(self):
         return {
@@ -121,6 +127,32 @@ class Request(db.Model):
             "quantity": self.quantity,
             "urgency": self.urgency,
             "status": self.status,
-            "reviewed_by_id": self.reviewed_by_id
+            "reviewed_by_id": self.reviewed_by_id,
+            "created_at": self.created_at.strftime("%Y-%m-%d %H:%M:%S"),
         }
-    
+
+
+class Notification(db.Model):
+    __tablename__ = 'notifications'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    request_id = db.Column(db.Integer, db.ForeignKey('requests.id'), nullable=True)  # 👈 Linked to a Request
+    message = db.Column(db.String(255), nullable=False)
+    read = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Relationships
+    user = db.relationship("User", backref=db.backref("notifications", lazy=True))
+    request = db.relationship("Request", backref=db.backref("related_notifications", lazy=True))
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "request_id": self.request_id,
+            "message": self.message,
+            "read": self.read,
+            "created_at": self.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+        }
+
