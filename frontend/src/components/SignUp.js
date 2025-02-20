@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import './SignUp.css'; // Make sure to add the styles for the sign-up page
+import './SignUp.css';
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
-    password: ''
+    password: '',
+    confirmPassword: '',
+    role: 'Employee',
   });
 
   const handleChange = (e) => {
@@ -59,6 +61,33 @@ const SignUp = () => {
               onChange={handleChange}
               required
             />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="confirmPassword">Confirm Password</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="role">Role</label>
+            <select
+              id="role"
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              required
+            >
+              <option value="Admin">Admin</option>
+              <option value="Procurement Manager">Procurement Manager</option>
+              <option value="Employee">Employee</option>
+            </select>
           </div>
 
           <button type="submit" className="signup-button">Sign Up</button>
