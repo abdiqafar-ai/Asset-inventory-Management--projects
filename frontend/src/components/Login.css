@@ -1,0 +1,103 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f1f5f8; /* Light gray background */
+    padding: 20px;
+  }
+  
+  .login-form-container {
+    background-color: #ffffff; /* White background for form */
+    border-radius: 12px; /* Slightly more rounded corners */
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+  }
+  
+  .login-form-container h2 {
+    font-size: 2rem;
+    color: #023047; /* Dark blue */
+    margin-bottom: 20px;
+    font-family: 'Urbanist', sans-serif;
+    font-weight: 600; /* Slightly lighter than bold */
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    display: block;
+    font-size: 1.1rem;
+    color: #023047; /* Dark blue */
+    margin-bottom: 8px;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 14px;
+    font-size: 1rem;
+    border: 1px solid #219ebc; /* Light blue border */
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  .form-group input:focus {
+    border-color: #023047; /* Dark blue focus border */
+    box-shadow: 0 0 5px rgba(2, 48, 71, 0.3); /* Subtle shadow effect on focus */
+  }
+  
+  .login-button {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem;
+    background-color: #219ebc; /* Light blue background */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .login-button:hover {
+    background-color: #023047; /* Dark blue on hover */
+    transform: scale(1.05); /* Slight hover effect */
+  }
+  
+  .forgot-password {
+    font-size: 1rem;
+    margin-top: 20px;
+  }
+  
+  .forgot-password a {
+    color: #219ebc; /* Light blue link color */
+    text-decoration: none;
+  }
+  
+  .forgot-password a:hover {
+    text-decoration: underline;
+    color: #023047; /* Dark blue on hover */
+  }
+  
+  /* Mobile View Adjustments */
+  @media (max-width: 768px) {
+    .login-form-container {
+      padding: 30px;
+    }
+  
+    .login-form-container h2 {
+      font-size: 1.8rem;
+    }
+  
+    .form-group input {
+      padding: 12px;
+    }
+  
+    .login-button {
+      padding: 12px;
+    }
+  }
