@@ -28,7 +28,7 @@ def create_app():
     app.register_blueprint(auth_routes, url_prefix="/api/auth")
     app.register_blueprint(asset_bp, url_prefix="/api/assets")  # Standardized name
     app.register_blueprint(request_routes, url_prefix="/api/requests")
-    app.register_blueprint(user_routes, url_prefix="/api/users")  # Consistent URL prefix
+    app.register_blueprint(user_routes, url_prefix="/api")  # Consistent URL prefix
 
     return app
 

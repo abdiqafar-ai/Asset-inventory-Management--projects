@@ -12,6 +12,6 @@ class Config:
 
     # JWT Token Expiry Configuration
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(days=15)
-    JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=15)
+    JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=20)
 
 
