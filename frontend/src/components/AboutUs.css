@@ -1,0 +1,92 @@
+/* General Styles */
+.about-us-container {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f9fc; /* Light background color */
+    color: #023047;  /* Darker text color for better contrast */
+    padding: 20px 15px;
+  }
+  
+  /* About Us Header */
+  .about-us-header {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: #0077b6; /* Primary color */
+    color: #ffffff; /* White text */
+    border-radius: 8px;
+    margin-bottom: 30px;
+  }
+  
+  .about-us-header h1 {
+    font-size: 3rem;
+    font-weight: bold;
+  }
+  
+  .about-us-header p {
+    font-size: 1.2rem;
+    max-width: 800px;
+    margin: 20px auto;
+    font-weight: 400;
+  }
+  
+  /* Image Styling */
+  .about-us-image {
+    width: 100%;
+    height: auto;
+    max-height: 400px; /* Adjust image height */
+    object-fit: cover;
+    border-radius: 8px;
+    margin-top: 20px;
+  }
+  
+  /* About Us Content */
+  .about-us-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .about-us-content h2 {
+    font-size: 2rem;
+    color: #0077b6;  /* Use primary color */
+    margin-top: 30px;
+    font-weight: bold;
+  }
+  
+  .about-us-content p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    font-weight: 400;
+  }
+  
+  .about-us-content ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .about-us-content ul li {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+  }
+  
+  .about-us-content ul li strong {
+    color: #023047;
+  }
+  
+  /* Button-like links for consistency */
+  .about-us-content a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #fb8500; /* A complementary color */
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .about-us-content a:hover {
+    background-color: #023047; /* Darker shade on hover */
+  }
+  
