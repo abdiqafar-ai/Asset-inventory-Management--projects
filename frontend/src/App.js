@@ -6,6 +6,7 @@ import NavbarComponent from './components/Navbar'; // The Navbar component
 import AssetList from './components/AssetList'; // Import other page components
 import SignUp from './components/SignUp'; // Sign-up page component
 import AboutUs from './components/AboutUs';
+import Login from './components/Login';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'; // Custom styles for the page
 
@@ -18,6 +19,7 @@ const App = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/assets" element={<AssetList />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/about" element={<AboutUs />} />
         </Routes>
       </Router>
