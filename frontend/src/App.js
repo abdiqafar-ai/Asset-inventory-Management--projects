@@ -4,7 +4,6 @@ import { Provider } from 'react-redux';
 import { store } from './store'; // Ensure your Redux store is set up correctly
 import NavbarComponent from './components/Navbar'; // The Navbar component
 import AssetList from './components/AssetList'; // Import other page components
-import Login from './components/Login'; // Login page component
 import SignUp from './components/SignUp'; // Sign-up page component
 import AboutUs from './components/AboutUs';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -18,7 +17,6 @@ const App = () => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/assets" element={<AssetList />} />
-          <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/about" element={<AboutUs />} />
         </Routes>
