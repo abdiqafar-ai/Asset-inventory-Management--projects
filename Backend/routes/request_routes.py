@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from models import db, User, Request, Asset
 from werkzeug.exceptions import BadRequest, NotFound
+import traceback
 
 request_routes = Blueprint('request_routes', __name__)
 
@@ -30,13 +31,14 @@ def create_request():
         db.session.add(new_request)
         db.session.commit()
         
-        return jsonify({"message": "Request created successfully"}), 201
+        return jsonify({"message": "Request created successfully", "request": new_request.to_dict()}), 201
     except BadRequest as e:
         return jsonify({"message": str(e)}), 400
     except NotFound as e:
         return jsonify({"message": str(e)}), 404
     except Exception as e:
         print(f"Error: {e}")
+        print(traceback.format_exc())
         return jsonify({"message": "An unexpected error occurred"}), 500
 
 @request_routes.route('/<int:request_id>/approve', methods=['PUT'])
@@ -52,18 +54,18 @@ def approve_request(request_id):
         if not manager:
             raise NotFound("Manager not found")
 
-        # Update request status
-        request_item.status = 'APPROVED'
-        request_item.reviewed_by_id = manager_id  # Save the manager's ID
+
+        request_item.approve(manager_id)
         db.session.commit()
         
-        return jsonify({"message": "Request approved"}), 200
+        return jsonify({"message": "Request approved", "request": request_item.to_dict()}), 200
     except BadRequest as e:
         return jsonify({"message": str(e)}), 400
     except NotFound as e:
         return jsonify({"message": str(e)}), 404
     except Exception as e:
         print(f"Error: {e}")
+        print(traceback.format_exc())
         return jsonify({"message": "An unexpected error occurred"}), 500
 
 @request_routes.route('/<int:request_id>/reject', methods=['PUT'])
@@ -79,18 +81,18 @@ def reject_request(request_id):
         if not manager:
             raise NotFound("Manager not found")
 
-        # Update request status
-        request_item.status = 'REJECTED'
-        request_item.reviewed_by_id = manager_id  # Save the manager's ID
+
+        request_item.reject(manager_id)
         db.session.commit()
         
-        return jsonify({"message": "Request rejected"}), 200
+        return jsonify({"message": "Request rejected", "request": request_item.to_dict()}), 200
     except BadRequest as e:
         return jsonify({"message": str(e)}), 400
     except NotFound as e:
         return jsonify({"message": str(e)}), 404
     except Exception as e:
         print(f"Error: {e}")
+        print(traceback.format_exc())
         return jsonify({"message": "An unexpected error occurred"}), 500
 
 @request_routes.route('', methods=['GET'])
@@ -102,9 +104,10 @@ def get_requests():
         else:
             requests = Request.query.all()
         
-        return jsonify([req.to_dict() for req in requests])
+        return jsonify([req.to_dict() for req in requests]), 200
     except Exception as e:
         print(f"Error: {e}")
+        print(traceback.format_exc())
         return jsonify({"message": "An unexpected error occurred"}), 500
 
 @request_routes.route('/<int:request_id>', methods=['GET'])
@@ -119,15 +122,17 @@ def view_request_by_id(request_id):
         return jsonify({"message": str(e)}), 404
     except Exception as e:
         print(f"Error: {e}")
+        print(traceback.format_exc())
         return jsonify({"message": "An unexpected error occurred"}), 500
 
 @request_routes.route('/user/<int:user_id>', methods=['GET'])
 def view_requests_by_user_id(user_id):
     try:
         requests = Request.query.filter_by(user_id=user_id).all()
-        return jsonify([req.to_dict() for req in requests])
+        return jsonify([req.to_dict() for req in requests]), 200
     except Exception as e:
         print(f"Error: {e}")
+        print(traceback.format_exc())
         return jsonify({"message": "An unexpected error occurred"}), 500
 
 @request_routes.route('/user/username/<username>', methods=['GET'])
@@ -138,47 +143,52 @@ def view_requests_by_user_username(username):
             raise NotFound("User not found")
         
         requests = Request.query.filter_by(user_id=user.id).all()
-        return jsonify([req.to_dict() for req in requests])
+        return jsonify([req.to_dict() for req in requests]), 200
     except NotFound as e:
         return jsonify({"message": str(e)}), 404
     except Exception as e:
         print(f"Error: {e}")
+        print(traceback.format_exc())
         return jsonify({"message": "An unexpected error occurred"}), 500
 
 @request_routes.route('/asset/<int:asset_id>', methods=['GET'])
 def view_requests_by_asset_id(asset_id):
     try:
         requests = Request.query.filter_by(asset_id=asset_id).all()
-        return jsonify([req.to_dict() for req in requests])
+        return jsonify([req.to_dict() for req in requests]), 200
     except Exception as e:
         print(f"Error: {e}")
+        print(traceback.format_exc())
         return jsonify({"message": "An unexpected error occurred"}), 500
 
 @request_routes.route('/asset/name/<name>', methods=['GET'])
 def view_requests_by_asset_name(name):
     try:
         requests = Request.query.join(Asset).filter(Asset.name == name).all()
-        return jsonify([req.to_dict() for req in requests])
+        return jsonify([req.to_dict() for req in requests]), 200
     except Exception as e:
         print(f"Error: {e}")
+        print(traceback.format_exc())
         return jsonify({"message": "An unexpected error occurred"}), 500
 
 @request_routes.route('/type/<request_type>', methods=['GET'])
 def view_requests_by_request_type(request_type):
     try:
         requests = Request.query.filter_by(request_type=request_type).all()
-        return jsonify([req.to_dict() for req in requests])
+        return jsonify([req.to_dict() for req in requests]), 200
     except Exception as e:
         print(f"Error: {e}")
+        print(traceback.format_exc())
         return jsonify({"message": "An unexpected error occurred"}), 500
 
 @request_routes.route('/urgency/<urgency>', methods=['GET'])
 def view_requests_by_urgency(urgency):
     try:
         requests = Request.query.filter_by(urgency=urgency).all()
-        return jsonify([req.to_dict() for req in requests])
+        return jsonify([req.to_dict() for req in requests]), 200
     except Exception as e:
         print(f"Error: {e}")
+        print(traceback.format_exc())
         return jsonify({"message": "An unexpected error occurred"}), 500
 
 @request_routes.route('/date-range', methods=['GET'])
@@ -188,18 +198,20 @@ def view_requests_by_date_range():
         start_date = data['start_date']
         end_date = data['end_date']
         requests = Request.query.filter(Request.created_at.between(start_date, end_date)).all()
-        return jsonify([req.to_dict() for req in requests])
+        return jsonify([req.to_dict() for req in requests]), 200
     except Exception as e:
         print(f"Error: {e}")
+        print(traceback.format_exc())
         return jsonify({"message": "An unexpected error occurred"}), 500
 
 @request_routes.route('/manager/<int:manager_id>', methods=['GET'])
 def view_requests_by_manager_id(manager_id):
     try:
-        requests = Request.query.filter_by(manager_id=manager_id).all()
-        return jsonify([req.to_dict() for req in requests])
+        requests = Request.query.filter_by(reviewed_by_id=manager_id).all()
+        return jsonify([req.to_dict() for req in requests]), 200
     except Exception as e:
         print(f"Error: {e}")
+        print(traceback.format_exc())
         return jsonify({"message": "An unexpected error occurred"}), 500
 
 @request_routes.route('/<int:request_id>', methods=['PUT'])
@@ -216,13 +228,14 @@ def update_request(request_id):
         request_item.urgency = data.get('urgency', request_item.urgency)
         db.session.commit()
         
-        return jsonify({"message": "Request updated successfully"}), 200
+        return jsonify({"message": "Request updated successfully", "request": request_item.to_dict()}), 200
     except BadRequest as e:
         return jsonify({"message": str(e)}), 400
     except NotFound as e:
         return jsonify({"message": str(e)}), 404
     except Exception as e:
         print(f"Error: {e}")
+        print(traceback.format_exc())
         return jsonify({"message": "An unexpected error occurred"}), 500
 
 @request_routes.route('/<int:request_id>', methods=['DELETE'])
@@ -240,4 +253,5 @@ def delete_request(request_id):
         return jsonify({"message": str(e)}), 404
     except Exception as e:
         print(f"Error: {e}")
+        print(traceback.format_exc())
         return jsonify({"message": "An unexpected error occurred"}), 500

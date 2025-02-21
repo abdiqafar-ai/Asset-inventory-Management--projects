@@ -56,7 +56,7 @@ def update_user(user_id):
     if 'role' in data:
         user.role = UserRole[data['role']]
     if 'password' in data:
-        user.set_password(data['password'])  # Assuming set_password() hashes the password
+        user.set_password(data['password']) 
     db.session.commit()
 
     return jsonify({"message": "User updated successfully"}), 200
@@ -97,7 +97,7 @@ def delete_user(user_id):
     if not user:
         return jsonify({"message": "User not found"}), 404
 
-    # Delete associated requests
+    
     Request.query.filter_by(user_id=user.id).delete()
     Request.query.filter_by(reviewed_by_id=user.id).delete()
 

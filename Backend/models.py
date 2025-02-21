@@ -28,11 +28,11 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)  # New: Timestamp
     reset_token = db.Column(db.String(128), nullable=True, unique=True)  # New: Reset token
 
-    # Relationships
+
     created_requests = db.relationship("Request", foreign_keys="Request.user_id", lazy=True, overlaps="request_creator")
     assessed_requests = db.relationship("Request", foreign_keys="Request.reviewed_by_id", lazy=True, overlaps="request_assessor")
 
-    # Password handling
+
     def set_password(self, password):
         """Hashes and sets the user's password."""
         self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
@@ -41,7 +41,7 @@ class User(db.Model):
         """Checks if the provided password matches the hashed password."""
         return bcrypt.check_password_hash(self.password_hash, password)
 
-    # Convert object to dictionary
+
     def to_dict(self, include_email=True):
         """Returns user data as a dictionary, with optional email inclusion."""
         data = {
@@ -55,39 +55,60 @@ class User(db.Model):
             data["email"] = self.email 
         return data
 
-
-
 class Category(db.Model):
+    
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
+    name = db.Column(db.String(50), nullable=False, unique=True)
+    assets = db.relationship('Asset', backref='category', lazy=True)
+
+    def __repr__(self):
+        return f"<Category {self.name}>"
 
     def to_dict(self):
+
         return {
             'id': self.id,
-            'name': self.name
+            'name': self.name,
+            'assets': [asset.to_dict() for asset in self.assets]
         }
 
 class Asset(db.Model):
+    
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
+    name = db.Column(db.String(100), nullable=False, unique=True)
     description = db.Column(db.String(255))
     status = db.Column(db.String(50), nullable=False)
     image_url = db.Column(db.String(255))
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
-    allocated_to = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True) 
+    allocated_to = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+
+    user = db.relationship("User", foreign_keys=[allocated_to], backref=db.backref("allocated_assets", lazy=True))
+    requests = db.relationship("Request", backref="asset", lazy=True)
+
+    def __repr__(self):
+        return f"<Asset {self.name}>"
 
     def to_dict(self):
+        
         return {
             'id': self.id,
             'name': self.name,
             'description': self.description,
             'status': self.status,
             'image_url': self.image_url,
-            'category_id': self.category_id,
-            'allocated_to': self.allocated_to 
+            'category': {
+                'id': self.category.id,
+                'name': self.category.name
+            },
+            'allocated_to': {
+                'id': self.user.id if self.user else None,
+                'name': self.user.username if self.user else None
+            },
+            'requests': [request.to_dict() for request in self.requests]
         }
 
 class Request(db.Model):
+    
     __tablename__ = 'requests'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -103,61 +124,85 @@ class Request(db.Model):
 
     request_creator = db.relationship("User", foreign_keys=[user_id], lazy=True)
     request_assessor = db.relationship("User", foreign_keys=[reviewed_by_id], lazy=True)
+    notifications = db.relationship('Notification', backref='request', lazy=True)
 
-
-    notifications = db.relationship('Notification', lazy=True)
+    def __repr__(self):
+        return f"<Request {self.id} by User {self.user_id}>"
 
     def approve(self, manager_id):
+        
         self.status = "APPROVED"
         self.reviewed_by_id = manager_id
 
     def reject(self, manager_id):
+        
         self.status = "REJECTED"
         self.reviewed_by_id = manager_id
 
     def complete(self):
+        
         self.status = "COMPLETED"
 
     def to_dict(self):
+        
         return {
             "id": self.id,
-            "user_id": self.user_id,
-            "asset_id": self.asset_id,
+            "user": {
+                "id": self.request_creator.id,
+                "name": self.request_creator.username
+            },
+            "asset": {
+                "id": self.asset.id,
+                "name": self.asset.name
+            },
             "request_type": self.request_type,
             "reason": self.reason,
             "quantity": self.quantity,
             "urgency": self.urgency,
             "status": self.status,
-            "reviewed_by_id": self.reviewed_by_id,
+            "reviewed_by": {
+                "id": self.request_assessor.id if self.request_assessor else None,
+                "name": self.request_assessor.username if self.request_assessor else None
+            },
             "created_at": self.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+            "notifications": [notification.to_dict() for notification in self.notifications]
         }
 
-
 class Notification(db.Model):
+    
     __tablename__ = 'notifications'
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    request_id = db.Column(db.Integer, db.ForeignKey('requests.id'), nullable=True)  # 👈 Linked to a Request
+    request_id = db.Column(db.Integer, db.ForeignKey('requests.id'), nullable=True)
     message = db.Column(db.String(255), nullable=False)
     read = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-
     user = db.relationship("User", backref=db.backref("notifications", lazy=True))
-    request = db.relationship("Request", backref=db.backref("related_notifications", lazy=True))
+
+    def __repr__(self):
+        return f"<Notification {self.id} for User {self.user_id}>"
 
     def to_dict(self):
+        
         return {
             "id": self.id,
-            "user_id": self.user_id,
-            "request_id": self.request_id,
+            "user": {
+                "id": self.user.id,
+                "name": self.user.username
+            },
+            "request": {
+                "id": self.request.id if self.request else None,
+                "name": self.request.request_type if self.request else None
+            },
             "message": self.message,
             "read": self.read,
             "created_at": self.created_at.strftime("%Y-%m-%d %H:%M:%S"),
         }
 
 class ActivityLog(db.Model):
+    
     __tablename__ = "activity_logs"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -167,10 +212,18 @@ class ActivityLog(db.Model):
 
     user = db.relationship("User", backref=db.backref("activity_logs", lazy=True))
 
+    def __repr__(self):
+        return f"<ActivityLog {self.id} by User {self.user_id}>"
+
     def to_dict(self):
+        
         return {
             "id": self.id,
-            "user_id": self.user_id,
+            "user": {
+                "id": self.user.id,
+                "name": self.user.username
+            },
             "action": self.action,
             "timestamp": self.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
         }
+    

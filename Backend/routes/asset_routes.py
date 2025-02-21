@@ -1,11 +1,11 @@
 import traceback
 from flask import Blueprint, request, jsonify
-from models import db, Category, Asset, User
+from models import db, Category, Asset, User, Request
 from werkzeug.exceptions import BadRequest, NotFound
 
 asset_bp = Blueprint('asset_bp', __name__)
 
-# Add an Asset
+
 @asset_bp.route('/add', methods=['POST'])
 def add_asset():
     try:
@@ -21,19 +21,19 @@ def add_asset():
         if not category:
             raise NotFound("Category not found")
 
-        # Assign asset to a Procurement Manager if allocated_to is not provided
+
         allocated_to = data.get('allocated_to')
         if not allocated_to:
-            procurement_manager = db.session.query(User.id).filter_by(role='PROCUREMENT_MANAGER').first()
+            procurement_manager = db.session.query(User).filter_by(role='PROCUREMENT_MANAGER').first()
             if not procurement_manager:
                 return jsonify({"message": "No Procurement Manager found"}), 400
             allocated_to = procurement_manager.id
 
         new_asset = Asset(
             name=data['name'],
-            description=data['description'],
+            description=data.get('description'),
             status=data['status'],
-            image_url=data['image_url'],
+            image_url=data.get('image_url'),
             category_id=data['category_id'],
             allocated_to=allocated_to
         )
@@ -41,7 +41,7 @@ def add_asset():
         db.session.add(new_asset)
         db.session.commit()
 
-        return jsonify({"message": "Asset added successfully"}), 201
+        return jsonify({"message": "Asset added successfully", "asset": new_asset.to_dict()}), 201
     except BadRequest as e:
         return jsonify({"message": str(e)}), 400
     except NotFound as e:
@@ -52,7 +52,7 @@ def add_asset():
         return jsonify({"message": "An unexpected error occurred"}), 500
 
 
-# Add a Category
+
 @asset_bp.route('/categories', methods=['POST'])
 def add_category():
     try:
@@ -71,7 +71,7 @@ def add_category():
         db.session.add(new_category)
         db.session.commit()
 
-        return jsonify({"message": "Category added successfully"}), 201
+        return jsonify({"message": "Category added successfully", "category": new_category.to_dict()}), 201
     except BadRequest as e:
         return jsonify({"message": str(e)}), 400
     except Exception as e:
@@ -79,7 +79,7 @@ def add_category():
         print(traceback.format_exc())
         return jsonify({"message": "An unexpected error occurred"}), 500
 
-# View All Categories
+
 @asset_bp.route('/categories', methods=['GET'])
 def view_all_categories():
     try:
@@ -90,7 +90,7 @@ def view_all_categories():
         print(traceback.format_exc())
         return jsonify({"message": "An unexpected error occurred"}), 500
 
-# View All Assets
+
 @asset_bp.route('', methods=['GET'])
 def view_all_assets():
     try:
@@ -208,7 +208,7 @@ def update_asset(asset_id):
         asset.allocated_to = data.get('allocated_to', asset.allocated_to)
         db.session.commit()
 
-        return jsonify({"message": "Asset updated successfully"}), 200
+        return jsonify({"message": "Asset updated successfully", "asset": asset.to_dict()}), 200
     except NotFound as e:
         return jsonify({"message": str(e)}), 404
     except Exception as e:
@@ -230,6 +230,46 @@ def delete_asset(asset_id):
         return jsonify({"message": "Asset deleted successfully"}), 200
     except NotFound as e:
         return jsonify({"message": str(e)}), 404
+    except Exception as e:
+        print(f"Error: {e}")
+        print(traceback.format_exc())
+        return jsonify({"message": "An unexpected error occurred"}), 500
+
+# Generate Report
+@asset_bp.route('/report', methods=['GET'])
+def generate_report():
+    try:
+        report_type = request.args.get('type')
+        if not report_type:
+            raise BadRequest("Report type is required")
+
+        if report_type == 'asset_usage':
+            assets = db.session.query(
+                Asset.name,
+                db.func.count(Request.id).label('usage_count')
+            ).join(Request, Asset.id == Request.asset_id).group_by(Asset.name).all()
+            report = [{'asset': asset.name, 'usage_count': asset.usage_count} for asset in assets]
+        
+        elif report_type == 'procurement_status':
+            requests = db.session.query(
+                Request.status,
+                db.func.count(Request.id).label('count')
+            ).group_by(Request.status).all()
+            report = [{'status': req.status, 'count': req.count} for req in requests]
+        
+        elif report_type == 'user_activity':
+            activities = db.session.query(
+                User.username,
+                db.func.count(Request.id).label('activity_count')
+            ).join(Request, User.id == Request.user_id).group_by(User.username).all()
+            report = [{'user': activity.username, 'activity_count': activity.activity_count} for activity in activities]
+        
+        else:
+            raise BadRequest("Invalid report type")
+
+        return jsonify(report), 200
+    except BadRequest as e:
+        return jsonify({"message": str(e)}), 400
     except Exception as e:
         print(f"Error: {e}")
         print(traceback.format_exc())
