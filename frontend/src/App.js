@@ -7,6 +7,8 @@ import AssetList from './components/AssetList'; // Import other page components
 import SignUp from './components/SignUp'; // Sign-up page component
 import AboutUs from './components/AboutUs';
 import Login from './components/Login';
+import ForgotPassword from './components/ForgotPassword';
+import ResetPassword from "./components/ResetPassword";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'; // Custom styles for the page
 
@@ -20,6 +22,11 @@ const App = () => {
           <Route path="/assets" element={<AssetList />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route
+            path="/reset-password/:resetToken"
+            element={<ResetPassword />}
+          />
           <Route path="/about" element={<AboutUs />} />
         </Routes>
       </Router>

@@ -26,6 +26,7 @@ class User(db.Model):
     role = db.Column(db.Enum(UserRole), nullable=False)
     is_active = db.Column(db.Boolean, default=True, nullable=False) # New: User activation status
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)  # New: Timestamp
+    reset_token = db.Column(db.String(128), nullable=True, unique=True)  # New: Reset token
 
     # Relationships
     created_requests = db.relationship("Request", foreign_keys="Request.user_id", lazy=True, overlaps="request_creator")
@@ -51,7 +52,7 @@ class User(db.Model):
             "created_at": self.created_at.strftime("%Y-%m-%d %H:%M:%S") if self.created_at else None
         }
         if include_email:
-            data["email"] = self.email  # Optional: Exclude email in some cases
+            data["email"] = self.email 
         return data
 
 
@@ -73,7 +74,7 @@ class Asset(db.Model):
     status = db.Column(db.String(50), nullable=False)
     image_url = db.Column(db.String(255))
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
-    allocated_to = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)  # Link to manager
+    allocated_to = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True) 
 
     def to_dict(self):
         return {
@@ -103,7 +104,7 @@ class Request(db.Model):
     request_creator = db.relationship("User", foreign_keys=[user_id], lazy=True)
     request_assessor = db.relationship("User", foreign_keys=[reviewed_by_id], lazy=True)
 
-    # Relationship with Notifications
+
     notifications = db.relationship('Notification', lazy=True)
 
     def approve(self, manager_id):
@@ -142,7 +143,7 @@ class Notification(db.Model):
     read = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    # Relationships
+
     user = db.relationship("User", backref=db.backref("notifications", lazy=True))
     request = db.relationship("Request", backref=db.backref("related_notifications", lazy=True))
 

@@ -1,22 +1,55 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { login } from "../actions/authActions"; // Ensure this action exists
-import { Form, Button, Container } from "react-bootstrap";
-import "./Login.css"; // Ensure this file exists for styling
+import { useNavigate } from "react-router-dom";
+import { login } from "../actions/authActions";
+import { Form, Button, Container, Alert } from "react-bootstrap";
+import apiService from "../services/ApiService";
+import "./Login.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [validated, setValidated] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.currentTarget;
+
     if (form.checkValidity() === false) {
       e.stopPropagation();
     } else {
-      dispatch(login(email, password));
+      try {
+        const response = await apiService.post("/auth/login", {
+          email,
+          password,
+        });
+
+        if (response.access_token && response.role) {
+          apiService.storeTokens(response.access_token, response.refresh_token);
+          dispatch(login(response.access_token));
+
+          switch (response.role) {
+            case "ADMIN":
+              navigate("/admin-dashboard");
+              break;
+            case "PROCUREMENT_MANAGER":
+              navigate("/procurement-dashboard");
+              break;
+            case "EMPLOYEE":
+              navigate("/employee-dashboard");
+              break;
+            default:
+              setError("Unauthorized access.");
+          }
+        } else {
+          setError("Invalid credentials.");
+        }
+      } catch (err) {
+        setError("Login failed. Please check your email and password.");
+      }
     }
     setValidated(true);
   };
@@ -25,8 +58,9 @@ const Login = () => {
     <Container className="login-container d-flex justify-content-center align-items-center">
       <div className="login-form-container">
         <h2 className="mb-4">Log In</h2>
+        {error && <Alert variant="danger">{error}</Alert>}
+
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
-          {/* Email Field */}
           <Form.Group controlId="formEmail" className="form-group mb-4">
             <Form.Label>Email</Form.Label>
             <Form.Control
@@ -35,14 +69,12 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              aria-describedby="emailHelp"
             />
             <Form.Control.Feedback type="invalid">
               Please provide a valid email.
             </Form.Control.Feedback>
           </Form.Group>
 
-          {/* Password Field */}
           <Form.Group controlId="formPassword" className="form-group mb-4">
             <Form.Label>Password</Form.Label>
             <Form.Control
@@ -57,14 +89,12 @@ const Login = () => {
             </Form.Control.Feedback>
           </Form.Group>
 
-          {/* Forgot Password Link */}
           <p className="forgot-password">
             <a href="/forgot-password" className="text-decoration-none">
               Forgot Password?
             </a>
           </p>
 
-          {/* Submit Button */}
           <Button variant="primary" type="submit" className="login-button">
             Log In
           </Button>
