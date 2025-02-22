@@ -140,7 +140,7 @@ def view_assets_by_status(status):
         print(traceback.format_exc())
         return jsonify({"message": "An unexpected error occurred"}), 500
 
-# View a Single Asset by ID
+
 @asset_bp.route('/<int:asset_id>', methods=['GET'])
 def view_asset_by_id(asset_id):
     try:
@@ -155,7 +155,7 @@ def view_asset_by_id(asset_id):
         print(traceback.format_exc())
         return jsonify({"message": "An unexpected error occurred"}), 500
 
-# View a Single Asset by Name
+
 @asset_bp.route('/name/<name>', methods=['GET'])
 def view_asset_by_name(name):
     try:
@@ -170,7 +170,7 @@ def view_asset_by_name(name):
         print(traceback.format_exc())
         return jsonify({"message": "An unexpected error occurred"}), 500
 
-# View Assets by Allocation
+
 @asset_bp.route('/allocated', methods=['GET'])
 def view_assets_by_allocation():
     try:
