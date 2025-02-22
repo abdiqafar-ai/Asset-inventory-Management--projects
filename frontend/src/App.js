@@ -10,6 +10,7 @@ import Login from './components/Login';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from "./components/ResetPassword";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Admin from "./admin/admin";
 import './App.css'; // Custom styles for the page
 
 const App = () => {
@@ -28,6 +29,7 @@ const App = () => {
             element={<ResetPassword />}
           />
           <Route path="/about" element={<AboutUs />} />
+          <Route path="/admin-dashboard" element={<Admin />} />
         </Routes>
       </Router>
     </Provider>
