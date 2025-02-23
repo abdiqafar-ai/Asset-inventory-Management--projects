@@ -21,7 +21,6 @@ def add_asset():
         if not category:
             raise NotFound("Category not found")
 
-
         allocated_to = data.get('allocated_to')
         if not allocated_to:
             procurement_manager = db.session.query(User).filter_by(role='PROCUREMENT_MANAGER').first()
@@ -274,3 +273,53 @@ def generate_report():
         print(f"Error: {e}")
         print(traceback.format_exc())
         return jsonify({"message": "An unexpected error occurred"}), 500
+    
+
+@asset_bp.route('/<int:asset_id>/allocate', methods=['PUT'])
+def allocate_or_reassign_asset(asset_id):
+    data = request.get_json()
+    employee_id = data.get('employee_id')
+    force = data.get('force', False)
+    
+    if not employee_id:
+        return jsonify({'error': 'Employee ID is required'}), 400
+
+    asset = Asset.query.get(asset_id)
+    if not asset:
+        return jsonify({'error': 'Asset not found'}), 404
+
+    # If asset is already allocated and no force flag provided, return error with allocated user info.
+    if asset.allocated_to is not None and not force:
+        employee = User.query.get(asset.allocated_to)
+        allocated_info = employee.to_dict() if employee else None
+        return jsonify({'error': 'Asset is already allocated', 'allocated_to': allocated_info}), 400
+
+    # Allocate (or reassign) the asset.
+    asset.allocated_to = employee_id
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': 'An error occurred while allocating the asset'}), 500
+
+    employee = User.query.get(employee_id)
+    allocation_info = employee.to_dict() if employee else None
+
+    return jsonify({
+        'message': 'Asset allocated successfully',
+        'asset': asset.to_dict(),
+        'allocated_to': allocation_info
+    }), 200
+
+@asset_bp.route('/<int:asset_id>/allocation', methods=['GET'])
+def get_asset_allocation(asset_id):
+    asset = Asset.query.get(asset_id)
+    if not asset:
+        return jsonify({"message": "Asset not found"}), 404
+
+    allocation_info = {
+        "allocated_to": asset.allocated_to,
+        "allocated_to_name": User.query.get(asset.allocated_to).username if asset.allocated_to else None
+    }
+
+    return jsonify(allocation_info), 200

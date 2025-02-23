@@ -1,0 +1,243 @@
+/* General card styling */
+.assets-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 20px;
+}
+
+.assets-card-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.assets-list {
+  list-style: none;
+  padding: 0;
+}
+
+.assets-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.assets-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+.assets-btn-primary {
+  background-color: #007bff;
+}
+
+.assets-btn:hover {
+  background-color: #0056b3;
+}
+
+.assets-error-message {
+  color: red;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.assets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.assets-asset-card {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+}
+
+.assets-asset-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.assets-asset-card h4 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.assets-asset-card p {
+  margin: 5px 0;
+}
+
+.assets-asset-card button {
+  padding: 8px 12px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #28a745;
+  color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+.assets-asset-card button:hover {
+  background-color: #218838;
+}
+
+.assets-asset-card button.view-allocation-btn {
+  background-color: #17a2b8;
+}
+
+.assets-asset-card button.view-allocation-btn:hover {
+  background-color: #138496;
+}
+
+.assets-asset-card button.delete-btn {
+  background-color: #dc3545;
+}
+
+.assets-asset-card button.delete-btn:hover {
+  background-color: #c82333;
+}
+
+.assets-update-form,
+.assets-add-form,
+.assets-assign-form,
+.allocation-info {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.assets-update-form h3,
+.assets-add-form h3,
+.assets-assign-form h3,
+.allocation-info h3 {
+  margin-bottom: 20px;
+}
+
+.assets-update-form form,
+.assets-add-form form,
+.assets-assign-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.assets-update-form input,
+.assets-add-form input,
+.assets-update-form select,
+.assets-add-form select,
+.assets-assign-form select {
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.assets-update-form button,
+.assets-add-form button,
+.assets-assign-form button {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+.assets-update-form button:hover,
+.assets-add-form button:hover,
+.assets-assign-form button:hover {
+  background-color: #0056b3;
+}
+
+.assets-update-form button[type="button"] {
+  background-color: #6c757d;
+}
+
+.assets-update-form button[type="button"]:hover {
+  background-color: #5a6268;
+}
+
+.assets-add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.assets-add-form input,
+.assets-add-form select {
+  padding: 12px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+}
+
+.assets-add-form button {
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #28a745;
+  color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+.assets-add-form button:hover {
+  background-color: #218838;
+}
+
+@media (max-width: 768px) {
+  .assets-card {
+    margin: 10px;
+    padding: 15px;
+  }
+
+  .assets-card-title {
+    font-size: 20px;
+  }
+
+  .assets-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .assets-asset-card {
+    padding: 15px;
+  }
+
+  .assets-update-form form,
+  .assets-add-form form,
+  .assets-assign-form form {
+    gap: 5px;
+  }
+
+  .assets-update-form input,
+  .assets-add-form input,
+  .assets-update-form select,
+  .assets-add-form select,
+  .assets-assign-form select {
+    padding: 8px;
+  }
+
+  .assets-update-form button,
+  .assets-add-form button,
+  .assets-assign-form button {
+    padding: 8px;
+  }
+}

@@ -5,41 +5,41 @@ import traceback
 
 request_routes = Blueprint('request_routes', __name__)
 
-@request_routes.route('/create', methods=['POST'])
-def create_request():
-    try:
-        data = request.get_json()
-        if not data:
-            raise BadRequest("Invalid JSON data")
+# @request_routes.route('/create', methods=['POST'])
+# def create_request():
+#     try:
+#         data = request.get_json()
+#         if not data:
+#             raise BadRequest("Invalid JSON data")
         
-        user = User.query.get(data['user_id'])
-        if not user:
-            raise NotFound("User not found")
+#         user = User.query.get(data['user_id'])
+#         if not user:
+#             raise NotFound("User not found")
         
-        asset = Asset.query.get(data['asset_id'])
-        if not asset:
-            raise NotFound("Asset not found")
+#         asset = Asset.query.get(data['asset_id'])
+#         if not asset:
+#             raise NotFound("Asset not found")
         
-        new_request = Request(
-            user_id=data['user_id'],
-            asset_id=data['asset_id'],
-            request_type=data['request_type'],
-            reason=data['reason'],
-            quantity=data['quantity'],
-            urgency=data['urgency']
-        )
-        db.session.add(new_request)
-        db.session.commit()
+#         new_request = Request(
+#             user_id=data['user_id'],
+#             asset_id=data['asset_id'],
+#             request_type=data['request_type'],
+#             reason=data['reason'],
+#             quantity=data['quantity'],
+#             urgency=data['urgency']
+#         )
+#         db.session.add(new_request)
+#         db.session.commit()
         
-        return jsonify({"message": "Request created successfully", "request": new_request.to_dict()}), 201
-    except BadRequest as e:
-        return jsonify({"message": str(e)}), 400
-    except NotFound as e:
-        return jsonify({"message": str(e)}), 404
-    except Exception as e:
-        print(f"Error: {e}")
-        print(traceback.format_exc())
-        return jsonify({"message": "An unexpected error occurred"}), 500
+#         return jsonify({"message": "Request created successfully", "request": new_request.to_dict()}), 201
+#     except BadRequest as e:
+#         return jsonify({"message": str(e)}), 400
+#     except NotFound as e:
+#         return jsonify({"message": str(e)}), 404
+#     except Exception as e:
+#         print(f"Error: {e}")
+#         print(traceback.format_exc())
+#         return jsonify({"message": "An unexpected error occurred"}), 500
 
 @request_routes.route('/<int:request_id>/approve', methods=['PUT'])
 def approve_request(request_id):
@@ -255,3 +255,45 @@ def delete_request(request_id):
         print(f"Error: {e}")
         print(traceback.format_exc())
         return jsonify({"message": "An unexpected error occurred"}), 500
+    
+@request_routes.route('', methods=['POST'])
+def create_request():
+    data = request.get_json()
+    user_id = data.get('user_id')
+    asset_id = data.get('asset_id')
+    request_type = data.get('request_type')
+    reason = data.get('reason')
+    quantity = data.get('quantity')
+    urgency = data.get('urgency')
+
+    # Validate required fields
+    if not all([user_id, asset_id, request_type, reason, quantity, urgency]):
+        return jsonify({'error': 'Missing required fields'}), 400
+
+    new_request = Request(
+        user_id=user_id,
+        asset_id=asset_id,
+        request_type=request_type,
+        reason=reason,
+        quantity=quantity,
+        urgency=urgency,
+        status="PENDING"
+    )
+    db.session.add(new_request)
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': 'Error creating request'}), 500
+
+    return jsonify({'message': 'Request created successfully', 'request': new_request.to_dict()}), 201
+
+@request_routes.route('/completed', methods=['GET'])
+def get_completed_requests():
+    completed_requests = Request.query.filter_by(status="COMPLETED").all()
+    return jsonify({'completed_requests': [req.to_dict() for req in completed_requests]}), 200
+
+@request_routes.route('/pending', methods=['GET'])
+def get_pending_requests():
+    pending_requests = Request.query.filter_by(status="PENDING").all()
+    return jsonify({'pending_requests': [req.to_dict() for req in pending_requests]}), 200

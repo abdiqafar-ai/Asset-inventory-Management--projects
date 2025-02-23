@@ -3,7 +3,9 @@ import AdminDashboard from './adminDashboard';
 
 const Admin = () => {
   return (
+    <>
     <AdminDashboard />
+    </>
   );
 }
 
