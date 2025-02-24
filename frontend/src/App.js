@@ -12,6 +12,7 @@ import ResetPassword from "./components/ResetPassword";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Admin from "./admin/admin";
 import Procurement from './ProcurementManager/procurement';
+import Employee from './employee/employee';
 import './App.css'; // Custom styles for the page
 
 const App = () => {
@@ -32,6 +33,7 @@ const App = () => {
           <Route path="/about" element={<AboutUs />} />
           <Route path="/admin-dashboard" element={<Admin />} />
           <Route path="/procurement-dashboard" element={<Procurement />} />
+          <Route path="/employee-dashboard" element={<Employee />} />
         </Routes>
       </Router>
     </Provider>

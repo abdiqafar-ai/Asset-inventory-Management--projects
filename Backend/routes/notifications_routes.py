@@ -1,5 +1,7 @@
 from flask import Blueprint, jsonify, request
 from models import db, Notification, Request, User
+from flask_login import current_user  # Fix "current_user" error
+from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.exceptions import BadRequest, NotFound
 import traceback
 
@@ -105,3 +107,38 @@ def delete_notification(notification_id):
         print(f"Error: {e}")
         print(traceback.format_exc())
         return jsonify({"message": "An unexpected error occurred"}), 500
+    
+@notifications_routes.route("notifications/mark-all-read", methods=["PUT"])
+def mark_all_notifications_read():
+    """
+    Mark all notifications as read for the current user.
+    """
+    try:
+        # Get the current user's ID (example: using Flask-Login's `current_user`)
+        user_id = current_user.id
+
+        # Fetch all unread notifications for the user
+        unread_notifications = Notification.query.filter(
+            Notification.user_id == user_id,
+            Notification.read == False
+        ).all()
+
+        if not unread_notifications:
+            return jsonify({"message": "No unread notifications found"}), 200
+
+        # Mark all as read
+        for notification in unread_notifications:
+            notification.read = True
+
+        db.session.commit()
+
+        return jsonify({
+            "message": f"{len(unread_notifications)} notifications marked as read",
+            "count": len(unread_notifications)
+        }), 200
+
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        return jsonify({"error": "Database error", "details": str(e)}), 500
+    except Exception as e:
+        return jsonify({"error": "Server error", "details": str(e)}), 500   
