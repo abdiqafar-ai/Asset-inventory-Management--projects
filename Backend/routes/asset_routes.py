@@ -323,3 +323,29 @@ def get_asset_allocation(asset_id):
     }
 
     return jsonify(allocation_info), 200
+
+
+@asset_bp.route('/categories/<int:category_id>', methods=['DELETE'])
+def delete_category(category_id):
+    try:
+        category = Category.query.get(category_id)
+
+        if not category:
+            return jsonify({"message": "Category not found"}), 404
+
+        # Update assets that are linked to the category to set category_id to None
+        assets = Asset.query.filter_by(category_id=category_id).all()
+
+        for asset in assets:
+            asset.category_id = None  # or you can set it to another category if preferred
+
+        db.session.delete(category)
+        db.session.commit()
+
+        return jsonify({"message": "Category deleted successfully and assets updated"}), 200
+
+    except Exception as e:
+        print(f"Error: {e}")
+        print(traceback.format_exc())
+        return jsonify({"message": "An unexpected error occurred"}), 500
+
