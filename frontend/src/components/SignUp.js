@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import apiService from "../services/ApiService"; // Import API service
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import eye icon for toggle
 import "./SignUp.css";
 
 const SignUp = () => {
@@ -13,6 +14,8 @@ const SignUp = () => {
     role: "",
   });
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // State for password visibility
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // State for confirm password visibility
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,12 +25,10 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
- 
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
       return;
     }
-
 
     if (!formData.role) {
       setError("Please select a role");
@@ -84,26 +85,44 @@ const SignUp = () => {
 
           <div className="form-group">
             <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
+            <div className="password-input-container">
+              <input
+                type={showPassword ? "text" : "password"} // Toggle password visibility
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword(!showPassword)} // Toggle password visibility
+              >
+                {showPassword ? <FaEye /> : <FaEyeSlash />} {/* Show open eye for visible password */}
+              </button>
+            </div>
           </div>
 
           <div className="form-group">
             <label htmlFor="confirmPassword">Confirm Password</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-            />
+            <div className="password-input-container">
+              <input
+                type={showConfirmPassword ? "text" : "password"} // Toggle confirm password visibility
+                id="confirmPassword"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+              />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)} // Toggle confirm password visibility
+              >
+                {showConfirmPassword ? <FaEye /> : <FaEyeSlash />} {/* Show open eye for visible password */}
+              </button>
+            </div>
           </div>
 
           <div className="form-group">

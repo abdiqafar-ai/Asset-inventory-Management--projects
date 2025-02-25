@@ -16,7 +16,6 @@ const AdminSidebar = ({ selectedCategory, setSelectedCategory }) => {
     { name: "Users", icon: <FaUsers />, category: "users" },
     { name: "Requests", icon: <FaFileAlt />, category: "requests" },
     { name: "Assets", icon: <FaToolbox />, category: "assets" },
-    { name: "Notifications", icon: <FaBell />, category: "notifications" },
   ];
 
   return (
