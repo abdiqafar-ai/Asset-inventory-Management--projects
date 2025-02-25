@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import apiService from "../services/ApiService";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./RequestView.css";
 
 const RequestView = () => {
@@ -21,6 +22,7 @@ const RequestView = () => {
   const [requestDetails, setRequestDetails] = useState(null);
   const [selectedManager, setSelectedManager] = useState("");
   const [notificationMessage, setNotificationMessage] = useState("");
+  const [isDetailsVisible, setIsDetailsVisible] = useState(false);
 
   useEffect(() => {
     apiService
@@ -106,15 +108,30 @@ const RequestView = () => {
   };
 
   const handleViewRequestDetails = (requestId) => {
+    if (isDetailsVisible && requestDetails?.id === requestId) {
+      setIsDetailsVisible(false);  // If the same request, hide the details
+    } else {
+      apiService
+        .get(`/requests/${requestId}`)
+        .then((data) => {
+          setRequestDetails(data);
+          setIsDetailsVisible(true);
+          console.log("Request details fetched:", data);
+        })
+        .catch((error) =>
+          console.error("Error fetching request details:", error)
+        );
+    }
+  };
+
+  const handleDeleteRequest = (requestId) => {
     apiService
-      .get(`/requests/${requestId}`)
+      .delete(`/requests/${requestId}`)
       .then((data) => {
-        setRequestDetails(data);
-        console.log("Request details fetched:", data);
+        console.log("Request deleted:", data);
+        setRequests(requests.filter((request) => request.id !== requestId));
       })
-      .catch((error) =>
-        console.error("Error fetching request details:", error)
-      );
+      .catch((error) => console.error("Error deleting request:", error));
   };
 
   const handleApproveRequest = (requestId) => {
@@ -192,182 +209,220 @@ const RequestView = () => {
   };
 
   return (
-    <div>
-      <div className="requests-list mt-4">
-        <h2>Requests</h2>
-        <div className="cards-container">
-          {requests.map((request) => (
-            <div key={request.id} className="card">
-              <h3>Request ID: {request.id}</h3>
-              <p>User ID: {request.user_id}</p>
-              <p>Asset ID: {request.asset_id}</p>
-              <p>Reason: {request.reason}</p>
-              <p>Quantity: {request.quantity}</p>
-              <p>Urgency: {request.urgency}</p>
-              <p>Status: {request.status}</p>
-              <button onClick={() => handleViewRequestDetails(request.id)}>
-                View Details
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {requestDetails && (
-        <div className="request-details mt-4">
-          <h2>Request Details</h2>
-          <p>REQUEST SENT BY: {requestDetails.user?.name}</p>
-          <p>ASSET: {requestDetails.asset?.name}</p>
-          <p>Reason: {requestDetails.reason}</p>
-          <p>Quantity: {requestDetails.quantity}</p>
-          <p>Urgency: {requestDetails.urgency}</p>
-          <p>Status: {requestDetails.status}</p>
-          <p>Created At: {requestDetails.created_at}</p>
-          <p>Request Type: {requestDetails.request_type}</p>
-          {requestDetails.reviewed_by?.name && (
-            <p>Reviewed By: {requestDetails.reviewed_by.name}</p>
-          )}
-          <div>
-            <label>Select Manager:</label>
-            <select
-              value={selectedManager}
-              onChange={(e) => setSelectedManager(e.target.value)}
-              required
-            >
-              <option value="" disabled>
-                Select a manager
-              </option>
-              {managers.map((manager) => (
-                <option key={manager.id} value={manager.id}>
-                  {manager.username}
-                </option>
-              ))}
-            </select>
+    <div className="container mt-4">
+      <div className="row">
+        <div className="col-md-8">
+          <h2>Requests</h2>
+          <div className="row">
+            {requests.map((request) => (
+              <div key={request.id} className="col-md-6 mb-4">
+                <div className="card request-card">
+                  <div className="card-body">
+                    <h5 className="card-title">Request ID: {request.id}</h5>
+                    <p className="card-text">User ID: {request.user_id}</p>
+                    <p className="card-text">Asset ID: {request.asset_id}</p>
+                    <p className="card-text">Reason: {request.reason}</p>
+                    <p className="card-text">Quantity: {request.quantity}</p>
+                    <p className="card-text">Urgency: {request.urgency}</p>
+                    <p className="card-text">Status: {request.status}</p>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => handleViewRequestDetails(request.id)}
+                    >
+                      {isDetailsVisible && requestDetails?.id === request.id
+                        ? "Hide Details"
+                        : "View Details"}
+                    </button>
+                    <button
+                      className="btn btn-danger ml-2"
+                      onClick={() => handleDeleteRequest(request.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+                {isDetailsVisible && requestDetails && requestDetails.id === request.id && (
+                  <div className="card mt-3 details-card">
+                    <div className="card-body">
+                      <h5 className="card-title">Request Details</h5>
+                      <p><strong>Request Sent By:</strong> {requestDetails.user?.name}</p>
+                      <p><strong>Asset:</strong> {requestDetails.asset?.name}</p>
+                      <p><strong>Reason:</strong> {requestDetails.reason}</p>
+                      <p><strong>Quantity:</strong> {requestDetails.quantity}</p>
+                      <p><strong>Urgency:</strong> {requestDetails.urgency}</p>
+                      <p><strong>Status:</strong> {requestDetails.status}</p>
+                      <p><strong>Created At:</strong> {requestDetails.created_at}</p>
+                      <p><strong>Request Type:</strong> {requestDetails.request_type}</p>
+                      {requestDetails.reviewed_by?.name && (
+                        <p><strong>Reviewed By:</strong> {requestDetails.reviewed_by.name}</p>
+                      )}
+                      <div className="form-group">
+                        <label style={{ color: 'black' }}>Select Manager:</label>
+                        <select
+                          className="form-control"
+                          value={selectedManager}
+                          onChange={(e) => setSelectedManager(e.target.value)}
+                          required
+                        >
+                          <option value="" disabled>Select a manager</option>
+                          {managers.map((manager) => (
+                            <option key={manager.id} value={manager.id}>
+                              {manager.username}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      {requestDetails.status !== "Approved" &&
+                        requestDetails.status !== "Rejected" && (
+                          <>
+                            <button
+                              className="btn btn-success mr-2"
+                              onClick={() => handleApproveRequest(requestDetails.id)}
+                            >
+                              Approve
+                            </button>
+                            <button
+                              className="btn btn-danger"
+                              onClick={() => handleRejectRequest(requestDetails.id)}
+                            >
+                              Reject
+                            </button>
+                          </>
+                        )}
+                      {(requestDetails.status === "Approved" ||
+                        requestDetails.status === "Rejected") && (
+                        <div className="form-group mt-3">
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter notification message"
+                            value={notificationMessage}
+                            onChange={(e) => setNotificationMessage(e.target.value)}
+                          />
+                          <button
+                            className="btn btn-info mt-2"
+                            onClick={handleSendNotification}
+                          >
+                            Send Notification
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
-          {requestDetails.status !== "Approved" &&
-            requestDetails.status !== "Rejected" && (
-              <>
-                <button onClick={() => handleApproveRequest(requestDetails.id)}>
-                  Approve
-                </button>
-                <button onClick={() => handleRejectRequest(requestDetails.id)}>
-                  Reject
-                </button>
-              </>
-            )}
-          {(requestDetails.status === "Approved" ||
-            requestDetails.status === "Rejected") && (
-            <div>
+        </div>
+
+        <div className="col-md-4">
+          <h2>Create Request</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="user_id">User</label>
+              <select
+                id="user_id"
+                name="user_id"
+                className="form-control"
+                value={formData.user_id}
+                onChange={handleChange}
+                required
+              >
+                <option value="" disabled>Select a user</option>
+                {users.map((user) => (
+                  <option key={user.id} value={user.id}>
+                    {user.username}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="category_id">Category</label>
+              <select
+                id="category_id"
+                name="category_id"
+                className="form-control"
+                value={formData.category_id}
+                onChange={handleCategoryChange}
+                required
+              >
+                <option value="" disabled>Select a category</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="asset_id">Asset</label>
+              <select
+                id="asset_id"
+                name="asset_id"
+                className="form-control"
+                value={formData.asset_id}
+                onChange={handleChange}
+                required
+              >
+                <option value="" disabled>Select an asset</option>
+                {assets.map((asset) => (
+                  <option key={asset.id} value={asset.id}>
+                    {asset.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="reason">Reason</label>
               <input
                 type="text"
-                placeholder="Enter notification message"
-                value={notificationMessage}
-                onChange={(e) => setNotificationMessage(e.target.value)}
+                id="reason"
+                name="reason"
+                className="form-control"
+                value={formData.reason}
+                onChange={handleChange}
+                required
               />
-              <button onClick={handleSendNotification}>
-                Send Notification
-              </button>
             </div>
-          )}
+
+            <div className="form-group">
+              <label htmlFor="quantity">Quantity</label>
+              <input
+                type="number"
+                id="quantity"
+                name="quantity"
+                className="form-control"
+                value={formData.quantity}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="urgency">Urgency</label>
+              <select
+                id="urgency"
+                name="urgency"
+                className="form-control"
+                value={formData.urgency}
+                onChange={handleChange}
+                required
+              >
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+              </select>
+            </div>
+
+            <button type="submit" className="btn btn-primary">
+              Create Request
+            </button>
+          </form>
         </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="form p-4 border rounded">
-        <label>User:</label>
-        <select
-          name="user_id"
-          onChange={handleChange}
-          value={formData.user_id}
-          required
-        >
-          <option value="" disabled>
-            Select a user
-          </option>
-          {users.map((user) => (
-            <option key={user.id} value={user.id}>
-              {user.name || user.username}
-            </option>
-          ))}
-        </select>
-
-        <label>Category:</label>
-        <select
-          name="category_id"
-          onChange={handleCategoryChange}
-          value={formData.category_id}
-          required
-        >
-          <option value="" disabled>
-            Select a category
-          </option>
-          {categories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          ))}
-        </select>
-
-        <label>Asset:</label>
-        <select
-          name="asset_id"
-          onChange={handleChange}
-          value={formData.asset_id}
-          required
-        >
-          <option value="" disabled>
-            Select an asset
-          </option>
-          {assets.map((asset) => (
-            <option key={asset.id} value={asset.id}>
-              {asset.name}
-            </option>
-          ))}
-        </select>
-
-        <label>Request Type:</label>
-        <input
-          type="text"
-          name="request_type"
-          onChange={handleChange}
-          value={formData.request_type}
-          required
-        />
-
-        <label>Reason:</label>
-        <input
-          type="text"
-          name="reason"
-          onChange={handleChange}
-          value={formData.reason}
-          required
-        />
-
-        <label>Quantity:</label>
-        <input
-          type="number"
-          name="quantity"
-          onChange={handleChange}
-          value={formData.quantity}
-          required
-        />
-
-        <label>Urgency:</label>
-        <select
-          name="urgency"
-          onChange={handleChange}
-          value={formData.urgency}
-          required
-        >
-          <option value="" disabled>
-            Select urgency
-          </option>
-          <option value="High">High</option>
-          <option value="Medium">Medium</option>
-          <option value="Low">Low</option>
-        </select>
-
-        <button type="submit">Submit Request</button>
-      </form>
+      </div>
     </div>
   );
 };
