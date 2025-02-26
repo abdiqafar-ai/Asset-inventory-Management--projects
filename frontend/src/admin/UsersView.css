@@ -1,56 +1,83 @@
-/* General Styles */
+/* Import Google Font (if not already imported) */
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap'); */
+
+/* Base Styles */
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f4f7fa;
+  margin: 0;
+  padding: 0;
+}
+
+/* Users Card Container */
 .users-card {
   background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
   padding: 20px;
-  max-width: 100%;
+  width: 95%;
+  max-width: 1000px;  /* default max width */
   overflow-x: auto;
 }
 
-.users-card-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 10px;
+/* Increase container width on wide screens */
+@media (min-width: 1400px) {
+  .users-card {
+    max-width: 100%;  /* expand on wide screens */
+  }
 }
 
+/* Title */
+.users-card-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #2c3e50;
+}
+
+/* Users Table */
 .users-table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
 }
 
-.users-table th, .users-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
+.users-table th, 
+.users-table td {
+  padding: 12px 15px;
+  border: 1px solid #e0e6ed;
   text-align: left;
+  font-size: 14px;
+  color: #2c3e50;
 }
 
 .users-table th {
-  background-color: #f4f4f4;
-  font-weight: bold;
+  background-color: #eaf2f8;
+  font-weight: 600;
 }
 
 .users-table tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: #f8f9fa;
 }
 
+/* Button Styles */
 .users-btn {
   display: inline-block;
   padding: 10px 20px;
   font-size: 14px;
-  border-radius: 4px;
+  border-radius: 6px;
   text-align: center;
   cursor: pointer;
-  text-decoration: none;
-  margin: 5px;
+  border: none;
+  transition: background-color 0.25s ease;
+  margin: 5px 2px;
 }
 
 .users-btn-primary {
   background-color: #007bff;
   color: #ffffff;
-  border: none;
 }
 
 .users-btn-primary:hover {
@@ -60,7 +87,6 @@
 .users-btn-secondary {
   background-color: #6c757d;
   color: #ffffff;
-  border: none;
 }
 
 .users-btn-secondary:hover {
@@ -70,19 +96,21 @@
 .users-btn-danger {
   background-color: #dc3545;
   color: #ffffff;
-  border: none;
 }
 
 .users-btn-danger:hover {
   background-color: #c82333;
 }
 
+/* Status Text */
 .users-text-green {
   color: #28a745;
+  font-weight: 600;
 }
 
 .users-text-red {
   color: #dc3545;
+  font-weight: 600;
 }
 
 /* Modal Styles */
@@ -92,62 +120,81 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 20px;
+  z-index: 1000;
 }
 
 .users-modal-content {
   background-color: #ffffff;
-  padding: 20px;
-  border-radius: 8px;
-  width: 90%;
+  padding: 30px;
+  border-radius: 10px;
+  width: 100%;
   max-width: 600px;
   max-height: 90%;
   overflow-y: auto;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
 
 .users-form-group {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .users-form-group label {
   display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #2c3e50;
 }
 
 .users-form-group input,
 .users-form-group select {
   width: 100%;
-  padding: 8px;
+  padding: 10px 12px;
+  border: 1px solid #dfe3e8;
+  border-radius: 6px;
+  font-size: 14px;
   box-sizing: border-box;
+  transition: border-color 0.25s ease;
 }
 
+.users-form-group input:focus,
+.users-form-group select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Success & Error Messages */
 .users-success-message {
   color: #28a745;
-  font-weight: bold;
+  font-weight: 600;
+  margin-top: 10px;
 }
 
 .users-error-message {
   color: #dc3545;
-  font-weight: bold;
+  font-weight: 600;
+  margin-top: 10px;
 }
 
 /* Responsive Styles */
 @media (max-width: 768px) {
   .users-card {
     margin: 10px;
-    padding: 10px;
+    padding: 15px;
   }
-
   .users-table th, .users-table td {
-    padding: 6px;
+    padding: 8px 10px;
+    font-size: 12px;
   }
-
   .users-btn {
     padding: 8px 16px;
     font-size: 12px;
+  }
+  .users-modal-content {
+    padding: 20px;
   }
 }

@@ -1,243 +1,274 @@
-/* General card styling */
-.assets-card {
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  margin: 20px;
-}
-
-.assets-card-title {
-  font-size: 24px;
-  margin-bottom: 20px;
-}
-
-.assets-list {
-  list-style: none;
-  padding: 0;
-}
-
-.assets-list-item {
+/* Base Container */
+.assets-view-container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Category Management Section */
+.category-panel {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Category Grid */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+/* Professional Category Card - Updated Style */
+.category-card {
+  background: #dad8d8;
+  border: 2px solid #3498db; /* accent border */
+  border-radius: 12px;
+  padding: 1.5rem;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid #eee;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.assets-btn {
-  padding: 10px 20px;
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Updated category header styling */
+.category-card h4 {
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  color: #2c3e50;
+  text-align: center;
+  font-family: 'Roboto', sans-serif; /* ensure this font is loaded */
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+/* Category Buttons */
+.category-btn {
+  padding: 0.5rem 1rem;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
-  background-color: #007bff;
+  font-size: 0.9rem;
+  margin: 0.3rem;
+  transition: background 0.2s ease;
+}
+
+.btn-view {
+  background-color: #2ecc71;
   color: #fff;
-  transition: background-color 0.3s ease;
 }
 
-.assets-btn-primary {
-  background-color: #007bff;
+.btn-view:hover {
+  background-color: #27ae60;
 }
 
-.assets-btn:hover {
-  background-color: #0056b3;
+.btn-delete {
+  background-color: #e74c3c;
+  color: #fff;
 }
 
-.assets-error-message {
-  color: red;
-  font-weight: bold;
-  margin-top: 10px;
+.btn-delete:hover {
+  background-color: #c0392b;
 }
 
+/* Add Category Form */
+.add-category-form {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.add-category-form input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.add-category-form button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #3498db;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s ease;
+}
+
+.add-category-form button:hover {
+  background-color: #2980b9;
+}
+
+/* Asset Management Section */
+.assets-panel {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Asset Grid */
 .assets-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
 }
 
+/* Dark Asset Card */
 .assets-asset-card {
-  background-color: #f8f9fa;
-  border: 1px solid #dee2e6;
+  background: #2c3e50;
+  color: #ecf0f1;
+  border: 1px solid #444;
   border-radius: 10px;
-  padding: 20px;
-  text-align: center;
-  position: relative;
+  padding: 1.5rem;
+  transition: box-shadow 0.3s ease;
+}
+
+.assets-asset-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .assets-asset-image {
-  max-width: 100%;
-  height: auto;
-  border-radius: 10px;
-  margin-bottom: 15px;
-}
-
-.assets-asset-card h4 {
-  font-size: 18px;
-  margin-bottom: 10px;
-}
-
-.assets-asset-card p {
-  margin: 5px 0;
-}
-
-.assets-asset-card button {
-  padding: 8px 12px;
-  margin: 5px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  background-color: #28a745;
-  color: #fff;
-  transition: background-color 0.3s ease;
-}
-
-.assets-asset-card button:hover {
-  background-color: #218838;
-}
-
-.assets-asset-card button.view-allocation-btn {
-  background-color: #17a2b8;
-}
-
-.assets-asset-card button.view-allocation-btn:hover {
-  background-color: #138496;
-}
-
-.assets-asset-card button.delete-btn {
-  background-color: #dc3545;
-}
-
-.assets-asset-card button.delete-btn:hover {
-  background-color: #c82333;
-}
-
-.assets-update-form,
-.assets-add-form,
-.assets-assign-form,
-.allocation-info {
-  background-color: #f8f9fa;
-  border: 1px solid #dee2e6;
-  border-radius: 10px;
-  padding: 20px;
-  margin-top: 20px;
-}
-
-.assets-update-form h3,
-.assets-add-form h3,
-.assets-assign-form h3,
-.allocation-info h3 {
-  margin-bottom: 20px;
-}
-
-.assets-update-form form,
-.assets-add-form form,
-.assets-assign-form form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.assets-update-form input,
-.assets-add-form input,
-.assets-update-form select,
-.assets-add-form select,
-.assets-assign-form select {
-  padding: 10px;
-  border: 1px solid #ced4da;
-  border-radius: 5px;
   width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 1rem;
 }
 
-.assets-update-form button,
-.assets-add-form button,
-.assets-assign-form button {
-  padding: 10px;
+/* Asset Buttons */
+.assets-btn {
+  padding: 0.5rem 1rem;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
-  background-color: #007bff;
+  font-weight: 500;
+  transition: background 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-update {
+  background-color: #3498db;
   color: #fff;
-  transition: background-color 0.3s ease;
 }
 
-.assets-update-form button:hover,
-.assets-add-form button:hover,
-.assets-assign-form button:hover {
-  background-color: #0056b3;
+.btn-update:hover {
+  background-color: #2980b9;
 }
 
-.assets-update-form button[type="button"] {
-  background-color: #6c757d;
+.btn-delete-asset {
+  background-color: #e74c3c;
+  color: #fff;
 }
 
-.assets-update-form button[type="button"]:hover {
-  background-color: #5a6268;
+.btn-delete-asset:hover {
+  background-color: #c0392b;
 }
 
-.assets-add-form {
+.btn-assign {
+  background-color: #2ecc71;
+  color: #fff;
+}
+
+.btn-assign:hover {
+  background-color: #27ae60;
+}
+
+.btn-view-asset {
+  background-color: #95a5a6;
+  color: #fff;
+}
+
+.btn-view-asset:hover {
+  background-color: #7f8c8d;
+}
+
+/* Button Group for asset actions */
+.button-group {
   display: flex;
-  flex-direction: column;
-  gap: 15px;
-  max-width: 600px;
-  margin: 0 auto;
+  gap: 1rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Forms (Asset Update & Assign) */
+.assets-add-form,
+.assets-update-form,
+.assets-assign-form {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  color: #2c3e50;
 }
 
 .assets-add-form input,
-.assets-add-form select {
-  padding: 12px;
-  border: 1px solid #ced4da;
-  border-radius: 5px;
+.assets-add-form select,
+.assets-update-form input,
+.assets-update-form select,
+.assets-assign-form select {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
 }
 
-.assets-add-form button {
-  padding: 12px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  background-color: #28a745;
-  color: #fff;
-  transition: background-color 0.3s ease;
+.assets-add-form input:focus,
+.assets-add-form select:focus,
+.assets-update-form input:focus,
+.assets-update-form select:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52,152,219,0.1);
 }
 
-.assets-add-form button:hover {
-  background-color: #218838;
+/* Allocation Info */
+.allocation-info {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  color: #2c3e50;
 }
 
+.allocation-info h3 {
+  margin-top: 0;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-  .assets-card {
-    margin: 10px;
-    padding: 15px;
-  }
-
-  .assets-card-title {
-    font-size: 20px;
-  }
-
-  .assets-grid {
+  .assets-grid,
+  .category-grid {
     grid-template-columns: 1fr;
   }
-
-  .assets-asset-card {
-    padding: 15px;
+  .button-group {
+    flex-direction: column;
   }
+}
 
-  .assets-update-form form,
-  .assets-add-form form,
-  .assets-assign-form form {
-    gap: 5px;
-  }
-
-  .assets-update-form input,
-  .assets-add-form input,
-  .assets-update-form select,
-  .assets-add-form select,
-  .assets-assign-form select {
-    padding: 8px;
-  }
-
-  .assets-update-form button,
-  .assets-add-form button,
-  .assets-assign-form button {
-    padding: 8px;
+@media (max-width: 480px) {
+  .assets-view-container {
+    padding: 1rem;
   }
 }

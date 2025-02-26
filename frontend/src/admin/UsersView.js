@@ -19,6 +19,7 @@ const UsersView = ({ data, refreshUsers }) => {
   const [createMessage, setCreateMessage] = useState("");
   const [createError, setCreateError] = useState("");
 
+  // Fetch user details for management
   const handleManageClick = async (userId) => {
     setLoadingUser(true);
     setManageError("");
@@ -168,7 +169,10 @@ const UsersView = ({ data, refreshUsers }) => {
           ))}
         </tbody>
       </table>
-      <div className="users-create-user-container">
+      <div
+        className="users-create-user-container"
+        style={{ textAlign: "center" }}
+      >
         <button
           className="users-btn users-btn-primary"
           onClick={openCreateModal}
