@@ -21,6 +21,7 @@ const ProcurementAssetsView = () => {
   const [assigningAsset, setAssigningAsset] = useState(null);
   const [selectedEmployeeId, setSelectedEmployeeId] = useState("");
   const [allocationInfo, setAllocationInfo] = useState(null);
+  const [allocationAssetId, setAllocationAssetId] = useState(null);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -62,6 +63,13 @@ const ProcurementAssetsView = () => {
     try {
       const result = await apiService.get(`/assets/category/${category_id}`);
       setAssets(result);
+      // Prepopulate newAsset with the selected category id.
+      setNewAsset((prev) => ({ ...prev, category_id }));
+      // Reset any open forms/info when switching categories.
+      setEditingAsset(null);
+      setAssigningAsset(null);
+      setAllocationAssetId(null);
+      setAllocationInfo(null);
     } catch (err) {
       setError("Error fetching assets for this category");
     } finally {
@@ -77,7 +85,6 @@ const ProcurementAssetsView = () => {
         allocated_to:
           editingAsset.allocated_to?.id || editingAsset.allocated_to,
       };
-
       await apiService.put(`/assets/${editingAsset.id}`, updatedAsset);
       setEditingAsset(null);
       fetchAssetsByCategory(selectedCategory);
@@ -104,7 +111,7 @@ const ProcurementAssetsView = () => {
         description: "",
         status: "",
         image_url: "",
-        category_id: "",
+        category_id: selectedCategory,
       });
       fetchAssetsByCategory(selectedCategory);
     } catch (err) {
@@ -131,6 +138,7 @@ const ProcurementAssetsView = () => {
     try {
       const result = await apiService.get(`/assets/${assetId}/allocation`);
       setAllocationInfo(result);
+      setAllocationAssetId(assetId);
     } catch (err) {
       setError("Error fetching allocation info");
     }
@@ -152,7 +160,9 @@ const ProcurementAssetsView = () => {
   const deleteCategory = async (categoryId) => {
     try {
       await apiService.delete(`/assets/categories/${categoryId}`);
-      setCategories(categories.filter((category) => category.id !== categoryId));
+      setCategories(
+        categories.filter((category) => category.id !== categoryId)
+      );
     } catch (err) {
       setError("Error deleting category");
     }
@@ -161,16 +171,15 @@ const ProcurementAssetsView = () => {
   return (
     <div className="procurement-card">
       <h2 className="procurement-card-title">Asset Categories</h2>
-      {loading && <p>Loading...</p>}
+      {loading && <p className="procurement-loading">Loading...</p>}
       {error && <p className="procurement-error-message">{error}</p>}
-
       <ul className="procurement-list">
         {categories.map((category) => (
           <li key={category.id} className="procurement-list-item">
-            {category.name}
-            <div>
+            <h4 className="procurement-category-name">{category.name}</h4>
+            <div className="procurement-category-buttons">
               <button
-                className="procurement-btn procurement-btn-primary"
+                className="procurement-btn procurement-btn-view"
                 onClick={() => fetchAssetsByCategory(category.id)}
               >
                 View
@@ -185,27 +194,83 @@ const ProcurementAssetsView = () => {
           </li>
         ))}
       </ul>
-
       <form className="procurement-add-category-form" onSubmit={addCategory}>
         <input
           type="text"
           placeholder="New Category Name"
           value={newCategory}
           onChange={(e) => setNewCategory(e.target.value)}
+          className="procurement-add-category-input"
           required
         />
-        <button type="submit" className="procurement-btn">
+        <button
+          type="submit"
+          className="procurement-btn procurement-btn-primary"
+        >
           Add Category
         </button>
       </form>
 
       {selectedCategory && (
-        <div className="procurement-card">
-          <h3>
+        <div className="procurement-assets-container">
+          <h3 className="procurement-assets-title">
             Assets in {categories.find((c) => c.id === selectedCategory)?.name}
           </h3>
+          {/* Add Asset Form at the top */}
+          <div className="procurement-add-form-container">
+            <h4 className="procurement-add-form-title">Add New Asset</h4>
+            <form className="procurement-add-form" onSubmit={addAsset}>
+              <input
+                type="text"
+                placeholder="Name"
+                value={newAsset.name}
+                onChange={(e) =>
+                  setNewAsset({ ...newAsset, name: e.target.value })
+                }
+                className="procurement-add-input"
+                required
+              />
+              <input
+                type="text"
+                placeholder="Description"
+                value={newAsset.description}
+                onChange={(e) =>
+                  setNewAsset({ ...newAsset, description: e.target.value })
+                }
+                className="procurement-add-input"
+                required
+              />
+              <input
+                type="text"
+                placeholder="Status"
+                value={newAsset.status}
+                onChange={(e) =>
+                  setNewAsset({ ...newAsset, status: e.target.value })
+                }
+                className="procurement-add-input"
+                required
+              />
+              <input
+                type="text"
+                placeholder="Image URL"
+                value={newAsset.image_url}
+                onChange={(e) =>
+                  setNewAsset({ ...newAsset, image_url: e.target.value })
+                }
+                className="procurement-add-input"
+                required
+              />
+              <button
+                type="submit"
+                className="procurement-btn procurement-btn-primary"
+              >
+                Add Asset
+              </button>
+            </form>
+          </div>
+          {/* Assets Grid */}
           {loading ? (
-            <p>Loading assets...</p>
+            <p className="procurement-loading">Loading assets...</p>
           ) : (
             <div className="procurement-grid">
               {assets.map((asset) => (
@@ -215,201 +280,180 @@ const ProcurementAssetsView = () => {
                     alt={asset.name}
                     className="procurement-asset-image"
                   />
-                  <h4>{asset.name}</h4>
-                  <p>
+                  <h4 className="procurement-asset-name">{asset.name}</h4>
+                  <p className="procurement-asset-description">
                     <strong>Description:</strong> {asset.description}
                   </p>
-                  <p>
+                  <p className="procurement-asset-status">
                     <strong>Status:</strong> {asset.status}
                   </p>
-                  <button onClick={() => setEditingAsset(asset)}>Update</button>
-                  <button onClick={() => deleteAsset(asset.id)}>Delete</button>
-                  <button onClick={() => setAssigningAsset(asset)}>
-                    {asset.allocated_to && asset.allocated_to.id
-                      ? "Reassign"
-                      : "Assign"}
-                  </button>
-                  <button onClick={() => viewAllocation(asset.id)}>
-                    View Allocation
-                  </button>
+                  <div className="button-group">
+                    <button
+                      className="procurement-btn procurement-btn-update"
+                      onClick={() => setEditingAsset(asset)}
+                    >
+                      Update
+                    </button>
+                    <button
+                      className="procurement-btn procurement-btn-delete-asset"
+                      onClick={() => deleteAsset(asset.id)}
+                    >
+                      Delete
+                    </button>
+                    <button
+                      className="procurement-btn procurement-btn-assign"
+                      onClick={() => setAssigningAsset(asset)}
+                    >
+                      {asset.allocated_to && asset.allocated_to.id
+                        ? "Reassign"
+                        : "Assign"}
+                    </button>
+                    <button
+                      className="procurement-btn procurement-btn-secondary"
+                      onClick={() => viewAllocation(asset.id)}
+                    >
+                      View Allocation
+                    </button>
+                  </div>
+                  {/* Inline Update Form */}
+                  {editingAsset && editingAsset.id === asset.id && (
+                    <div className="procurement-update-form">
+                      <h3 className="procurement-update-title">Update Asset</h3>
+                      <form onSubmit={updateAsset}>
+                        <input
+                          type="text"
+                          placeholder="Name"
+                          value={editingAsset.name}
+                          onChange={(e) =>
+                            setEditingAsset({
+                              ...editingAsset,
+                              name: e.target.value,
+                            })
+                          }
+                          className="procurement-update-input"
+                          required
+                        />
+                        <input
+                          type="text"
+                          placeholder="Description"
+                          value={editingAsset.description}
+                          onChange={(e) =>
+                            setEditingAsset({
+                              ...editingAsset,
+                              description: e.target.value,
+                            })
+                          }
+                          className="procurement-update-input"
+                          required
+                        />
+                        <input
+                          type="text"
+                          placeholder="Status"
+                          value={editingAsset.status}
+                          onChange={(e) =>
+                            setEditingAsset({
+                              ...editingAsset,
+                              status: e.target.value,
+                            })
+                          }
+                          className="procurement-update-input"
+                          required
+                        />
+                        <input
+                          type="text"
+                          placeholder="Image URL"
+                          value={editingAsset.image_url}
+                          onChange={(e) =>
+                            setEditingAsset({
+                              ...editingAsset,
+                              image_url: e.target.value,
+                            })
+                          }
+                          className="procurement-update-input"
+                          required
+                        />
+                        <div className="button-group">
+                          <button
+                            type="submit"
+                            className="procurement-btn procurement-btn-primary"
+                          >
+                            Save Changes
+                          </button>
+                          <button
+                            type="button"
+                            className="procurement-btn procurement-btn-secondary"
+                            onClick={() => setEditingAsset(null)}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  )}
+                  {/* Inline Assign/Reassign Form */}
+                  {assigningAsset && assigningAsset.id === asset.id && (
+                    <div className="procurement-assign-form">
+                      <h3 className="procurement-assign-title">
+                        {assigningAsset.allocated_to &&
+                        assigningAsset.allocated_to.id
+                          ? "Reassign Asset"
+                          : "Assign Asset"}
+                      </h3>
+                      <form onSubmit={allocateOrReassignAsset}>
+                        <select
+                          value={selectedEmployeeId}
+                          onChange={(e) =>
+                            setSelectedEmployeeId(e.target.value)
+                          }
+                          className="procurement-assign-select"
+                          required
+                        >
+                          <option value="" disabled>
+                            Select Employee
+                          </option>
+                          {employees.map((employee) => (
+                            <option key={employee.id} value={employee.id}>
+                              {employee.username}
+                            </option>
+                          ))}
+                        </select>
+                        <div className="button-group">
+                          <button
+                            type="submit"
+                            className="procurement-btn procurement-btn-primary"
+                          >
+                            {assigningAsset.allocated_to &&
+                            assigningAsset.allocated_to.id
+                              ? "Reassign"
+                              : "Assign"}
+                          </button>
+                          <button
+                            type="button"
+                            className="procurement-btn procurement-btn-secondary"
+                            onClick={() => setAssigningAsset(null)}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  )}
+                  {/* Inline Allocation Info */}
+                  {allocationAssetId === asset.id && allocationInfo && (
+                    <div className="procurement-allocation-info">
+                      <h3 className="procurement-allocation-title">
+                        Allocation Information
+                      </h3>
+                      <p className="procurement-allocation-text">
+                        <strong>Allocated To:</strong>{" "}
+                        {allocationInfo.allocated_to_name || "Not allocated"}
+                      </p>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
           )}
-
-          {allocationInfo && (
-            <div className="procurement-allocation-info">
-              <h3>Allocation Information</h3>
-              <p>
-                <strong>Allocated To:</strong>{" "}
-                {allocationInfo.allocated_to_name || "Not allocated"}
-              </p>
-            </div>
-          )}
-
-          {editingAsset && (
-            <div className="procurement-update-form">
-              <h3>Update Asset</h3>
-              <form onSubmit={updateAsset}>
-                <input
-                  type="text"
-                  placeholder="Name"
-                  value={editingAsset.name}
-                  onChange={(e) =>
-                    setEditingAsset({ ...editingAsset, name: e.target.value })
-                  }
-                  required
-                />
-                <input
-                  type="text"
-                  placeholder="Description"
-                  value={editingAsset.description}
-                  onChange={(e) =>
-                    setEditingAsset({
-                      ...editingAsset,
-                      description: e.target.value,
-                    })
-                  }
-                  required
-                />
-                <input
-                  type="text"
-                  placeholder="Status"
-                  value={editingAsset.status}
-                  onChange={(e) =>
-                    setEditingAsset({ ...editingAsset, status: e.target.value })
-                  }
-                  required
-                />
-                <input
-                  type="text"
-                  placeholder="Image URL"
-                  value={editingAsset.image_url}
-                  onChange={(e) =>
-                    setEditingAsset({
-                      ...editingAsset,
-                      image_url: e.target.value,
-                    })
-                  }
-                  required
-                />
-                <select
-                  value={editingAsset.category_id}
-                  onChange={(e) =>
-                    setEditingAsset({
-                      ...editingAsset,
-                      category_id: e.target.value,
-                    })
-                  }
-                  required
-                >
-                  <option value="" disabled>
-                    Select Category
-                  </option>
-                  {categories.map((category) => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
-                <button type="submit">Save Changes</button>
-                <button type="button" onClick={() => setEditingAsset(null)}>
-                  Cancel
-                </button>
-              </form>
-            </div>
-          )}
-
-          {assigningAsset && (
-            <div className="procurement-assign-form">
-              <h3>
-                {assigningAsset.allocated_to && assigningAsset.allocated_to.id
-                  ? "Reassign Asset"
-                  : "Assign Asset"}
-              </h3>
-              <form onSubmit={allocateOrReassignAsset}>
-                <select
-                  value={selectedEmployeeId}
-                  onChange={(e) => setSelectedEmployeeId(e.target.value)}
-                  required
-                >
-                  <option value="" disabled>
-                    Select Employee
-                  </option>
-                  {employees.map((employee) => (
-                    <option key={employee.id} value={employee.id}>
-                      {employee.username}
-                    </option>
-                  ))}
-                </select>
-                <button type="submit">
-                  {assigningAsset.allocated_to && assigningAsset.allocated_to.id
-                    ? "Reassign"
-                    : "Assign"}
-                </button>
-                <button type="button" onClick={() => setAssigningAsset(null)}>
-                  Cancel
-                </button>
-              </form>
-            </div>
-          )}
-
-          <h3>Add New Asset</h3>
-          <form className="procurement-add-form" onSubmit={addAsset}>
-            <input
-              type="text"
-              placeholder="Name"
-              value={newAsset.name}
-              onChange={(e) =>
-                setNewAsset({ ...newAsset, name: e.target.value })
-              }
-              required
-            />
-            <input
-              type="text"
-              placeholder="Description"
-              value={newAsset.description}
-              onChange={(e) =>
-                setNewAsset({ ...newAsset, description: e.target.value })
-              }
-              required
-            />
-            <input
-              type="text"
-              placeholder="Status"
-              value={newAsset.status}
-              onChange={(e) =>
-                setNewAsset({ ...newAsset, status: e.target.value })
-              }
-              required
-            />
-            <input
-              type="text"
-              placeholder="Image URL"
-              value={newAsset.image_url}
-              onChange={(e) =>
-                setNewAsset({ ...newAsset, image_url: e.target.value })
-              }
-              required
-            />
-            <select
-              value={newAsset.category_id}
-              onChange={(e) =>
-                setNewAsset({ ...newAsset, category_id: e.target.value })
-              }
-              required
-            >
-              <option value="" disabled>
-                Select Category
-              </option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-            <button type="submit">Add Asset</button>
-          </form>
         </div>
       )}
     </div>

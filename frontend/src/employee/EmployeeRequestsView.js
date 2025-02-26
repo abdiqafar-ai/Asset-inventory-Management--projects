@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import apiService from "../services/ApiService";
-// import "./employeeRequestView.css";
+import "./employeeRequestView.css";
 
 const EmployeeRequestView = () => {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([]); // Now holds employees
   const [categories, setCategories] = useState([]);
   const [assets, setAssets] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
   const [formData, setFormData] = useState({
     user_id: "",
     asset_id: "",
@@ -18,14 +19,17 @@ const EmployeeRequestView = () => {
   });
 
   useEffect(() => {
+    // Fetch employees (only those with role EMPLOYEE)
     apiService
-      .get("/users")
+      .get("/employees")
       .then((data) => {
-        if (Array.isArray(data)) setUsers(data);
+        if (data.employees && Array.isArray(data.employees))
+          setUsers(data.employees);
         else setUsers([]);
       })
-      .catch((error) => console.error("Error fetching users:", error));
+      .catch((error) => console.error("Error fetching employees:", error));
 
+    // Fetch asset categories
     apiService
       .get("/assets/categories")
       .then(setCategories)
@@ -56,6 +60,7 @@ const EmployeeRequestView = () => {
     apiService
       .post("/requests", formData)
       .then(() => {
+        // Reset the form data
         setFormData({
           user_id: "",
           asset_id: "",
@@ -65,7 +70,10 @@ const EmployeeRequestView = () => {
           urgency: "High",
           category_id: "",
         });
-        alert("Request submitted successfully!");
+        // Display success message
+        setShowSuccess(true);
+        // Hide the message after 3 seconds
+        setTimeout(() => setShowSuccess(false), 3000);
       })
       .catch((error) => console.error("Error creating request:", error));
   };
@@ -79,9 +87,15 @@ const EmployeeRequestView = () => {
         </p>
       </div>
 
+      {showSuccess && (
+        <div className="success-message">
+          <span className="check-icon">✓</span> Request well sent!
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="request-form">
         <div className="form-grid">
-          {/* User Selection */}
+          {/* Employee Selection */}
           <div className="form-group">
             <label className="form-label">Select Employee</label>
             <select
@@ -91,7 +105,9 @@ const EmployeeRequestView = () => {
               className="form-select"
               required
             >
-              <option value="" disabled>Select a user</option>
+              <option value="" disabled>
+                Select an employee
+              </option>
               {users.map((user) => (
                 <option key={user.id} value={user.id}>
                   {user.name || user.username}
@@ -110,7 +126,9 @@ const EmployeeRequestView = () => {
               className="form-select"
               required
             >
-              <option value="" disabled>Select a category</option>
+              <option value="" disabled>
+                Select a category
+              </option>
               {categories.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.name}
@@ -129,7 +147,9 @@ const EmployeeRequestView = () => {
               className="form-select"
               required
             >
-              <option value="" disabled>Select an asset</option>
+              <option value="" disabled>
+                Select an asset
+              </option>
               {assets.map((asset) => (
                 <option key={asset.id} value={asset.id}>
                   {asset.name}

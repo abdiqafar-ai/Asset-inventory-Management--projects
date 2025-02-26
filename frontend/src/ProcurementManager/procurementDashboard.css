@@ -20,11 +20,11 @@ body {
 }
 
 .procurement-sidebar.expanded {
-  width: 250px;
+  width: 300px;
 }
 
 .procurement-sidebar.collapsed {
-  width: 80px;
+  width: 60px;
 }
 
 .procurement-sidebar-toggle {
