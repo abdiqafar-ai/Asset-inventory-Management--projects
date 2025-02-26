@@ -1,95 +1,119 @@
-.procurement-requests-list {
-  margin-top: 1rem;
+.card {
+  border: 1px solid #e0e1dd;
+  transition: transform 0.2s;
+  max-width: 350px;  /* Smaller cards */
+  margin: 10px;
+  border-radius: 0.5rem; /* Rounded corners for more visual appeal */
 }
 
-.procurement-cards-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+.card:hover {
+  transform: scale(1.05);
 }
 
-.procurement-card {
-  background-color: #fefefe;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 1rem;
-  width: 100%;
-  max-width: 300px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+/* View Details card color and styling */
+.card-body {
+  background-color: #0f4c5c; /* View details card */
+  color: white;
+  padding: 15px;
 }
 
-.procurement-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.procurement-card h3 {
-  margin-bottom: 0.5rem;
-  font-size: 1.25rem;
-  color: #333;
-}
-
-.procurement-card p {
-  margin: 0.25rem 0;
-  color: #555;
-}
-
-.procurement-btn {
-  background-color: #007bff;
+.card-body .form-group label {
   color: #fff;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
-.procurement-btn:hover {
+.card-body .btn {
+  background-color: #ffffff; /* View Details button white */
+  color: #003049;
+  border: 1px solid #003049;
+}
+
+.card-body .btn:hover {
+  background-color: #f8f8f8;
+  border-color: #003049;
+}
+
+/* Details card color */
+.details-card .card-body {
+  background-color: #e5e5e5; /* Details card */
+  color: black;
+  padding: 15px;
+}
+
+.details-card .card-title {
+  color: black;
+}
+
+.card-body .form-group input,
+.card-body .form-group select {
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+  background-color: #f7f7f7;
+  padding: 10px;
+}
+
+/* Spacing between buttons in details view */
+.card-body .btn-success,
+.card-body .btn-danger {
+  margin-right: 15px;  /* Space between buttons */
+  width: auto; /* Adjust button width */
+}
+
+/* Approve and Reject button styles */
+.card-body .btn-success {
+  background-color: green; /* Black approve button */
+  border-color: #000000;
+  color: white;
+}
+
+.card-body .btn-danger {
+  background-color: red; /* Black reject button */
+  border-color: #000000;
+  color: white;
+}
+
+.card-body .btn-success:hover,
+.card-body .btn-danger:hover {
+  background-color: #333333;
+  border-color: #333333;
+}
+
+/* Request Form Styling */
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
   background-color: #0056b3;
+  border-color: #004085;
 }
 
-.procurement-request-details {
-  margin-top: 2rem;
-  padding: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #fff;
-  max-width: 600px;
-  margin: 2rem auto;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.btn-success {
+  background-color: #28a745;
+  border-color: #28a745;
 }
 
-.procurement-request-details h2 {
-  margin-bottom: 1rem;
-  color: #333;
+.btn-success:hover {
+  background-color: #218838;
+  border-color: #1e7e34;
 }
 
-.procurement-request-details p {
-  margin: 0.5rem 0;
-  color: #555;
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
 }
 
-.procurement-request-details select {
-  width: 100%;
-  padding: 0.5rem;
-  margin-top: 0.5rem;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+.btn-danger:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
 }
 
-@media (max-width: 768px) {
-  .procurement-cards-container {
-    flex-direction: column;
-    align-items: center;
-  }
+.btn-info {
+  background-color: #17a2b8;
+  border-color: #17a2b8;
+}
 
-  .procurement-card {
-    width: 90%;
-  }
-
-  .procurement-request-details {
-    width: 90%;
-  }
+.btn-info:hover {
+  background-color: #138496;
+  border-color: #117a8b;
 }
