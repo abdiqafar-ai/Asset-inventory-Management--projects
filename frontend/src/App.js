@@ -1,30 +1,52 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './store'; // Ensure your Redux store is set up correctly
 import NavbarComponent from './components/Navbar'; // The Navbar component
 import AssetList from './components/AssetList'; // Import other page components
-import Login from './components/Login'; // Login page component
 import SignUp from './components/SignUp'; // Sign-up page component
 import AboutUs from './components/AboutUs';
+import Login from './components/Login';
+import ForgotPassword from './components/ForgotPassword';
+import ResetPassword from "./components/ResetPassword";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Admin from "./admin/admin";
+import Procurement from './ProcurementManager/procurement';
+import Employee from './employee/employee';
 import './App.css'; // Custom styles for the page
 
 const App = () => {
   return (
     <Provider store={store}>
       <Router>
-        <NavbarComponent />
+        <Navbar /> {/* Conditionally rendered Navbar */}
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/assets" element={<AssetList />} />
-          <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
           <Route path="/about" element={<AboutUs />} />
+          <Route path="/admin-dashboard" element={<Admin />} />
+          <Route path="/procurement-dashboard" element={<Procurement />} />
+          <Route path="/employee-dashboard" element={<Employee />} />
         </Routes>
       </Router>
     </Provider>
   );
+};
+
+// Navbar Component that renders only on the Homepage ("/")
+const Navbar = () => {
+  const location = useLocation();
+
+  // Show Navbar only if the current path is "/"
+  if (location.pathname !== "/") {
+    return null;
+  }
+
+  return <NavbarComponent />;
 };
 
 const HomePage = () => {
@@ -35,7 +57,6 @@ const HomePage = () => {
         <p className="subheading">
           Easily manage, request, and track your company's assets with real-time updates and streamlined processes.
         </p>
-        {/* Call to Action Button - GET STARTED */}
         <Link to="/signup">
           <button className="cta-button">GET STARTED</button>
         </Link>
@@ -44,7 +65,6 @@ const HomePage = () => {
         <img src="/ASSET%20MANAGEMENT.jpeg" alt="Asset Tracking" className="homepage-image" />
       </div>
 
-      {/* Contact Section */}
       <div id="contact" className="contacts-section">
         <div className="contacts-box">
           <h2>Contact Us</h2>
@@ -54,24 +74,16 @@ const HomePage = () => {
             <p><strong>Phone:</strong> +123 456 7890</p>
           </div>
 
-          {/* Social Media Links using Font Awesome Icons */}
           <div className="social-media-links">
-            {/* Facebook Icon */}
             <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="social-media-link">
               <i className="fab fa-facebook-f"></i>
             </a>
-
-            {/* Twitter Icon */}
             <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="social-media-link">
               <i className="fab fa-twitter"></i>
             </a>
-
-            {/* LinkedIn Icon */}
             <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" className="social-media-link">
               <i className="fab fa-linkedin-in"></i>
             </a>
-
-            {/* Instagram Icon */}
             <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" className="social-media-link">
               <i className="fab fa-instagram"></i>
             </a>

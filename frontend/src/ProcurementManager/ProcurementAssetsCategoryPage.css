@@ -1,0 +1,98 @@
+/* General card styling */
+.procurement-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .procurement-card-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .procurement-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .procurement-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .procurement-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+    transition: background-color 0.3s ease;
+  }
+  
+  .procurement-btn-primary {
+    background-color: #007bff;
+  }
+  
+  .procurement-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .procurement-error-message {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: center;
+  }
+  
+  .procurement-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .procurement-modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+  }
+  
+  .procurement-btn-secondary {
+    background-color: #6c757d;
+  }
+  
+  .procurement-btn-secondary:hover {
+    background-color: #5a6268;
+  }
+  
+  @media (max-width: 768px) {
+    .procurement-card {
+      margin: 10px;
+      padding: 15px;
+    }
+  
+    .procurement-card-title {
+      font-size: 20px;
+    }
+  
+    .procurement-modal-content {
+      padding: 15px;
+    }
+  }
