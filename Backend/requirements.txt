@@ -7,3 +7,4 @@ flask-migrate
 python-dotenv
 flask-bcrypt
 Flask-CORS==3.0.10
+Flask-login
