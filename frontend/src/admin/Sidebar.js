@@ -3,9 +3,10 @@ import {
   FaUsers,
   FaFileAlt,
   FaToolbox,
-  FaBell,
   FaBars,
+  FaSignOutAlt,
 } from "react-icons/fa";
+import apiService from "../services/ApiService"; // Import the ApiService
 import "./adminDashboard.css";
 
 const AdminSidebar = ({ selectedCategory, setSelectedCategory }) => {
@@ -17,6 +18,13 @@ const AdminSidebar = ({ selectedCategory, setSelectedCategory }) => {
     { name: "Requests", icon: <FaFileAlt />, category: "requests" },
     { name: "Assets", icon: <FaToolbox />, category: "assets" },
   ];
+
+  const handleLogout = async () => {
+    const confirmed = window.confirm("Are you sure you want to log out?");
+    if (confirmed) {
+      await apiService.logout();
+    }
+  };
 
   return (
     <div className={`admin-sidebar ${isOpen ? "expanded" : "collapsed"}`}>
@@ -39,6 +47,12 @@ const AdminSidebar = ({ selectedCategory, setSelectedCategory }) => {
           </li>
         ))}
       </ul>
+      <div className="admin-sidebar-logout">
+        <button onClick={handleLogout} className="logout-button">
+          <FaSignOutAlt />
+          {isOpen && <span className="menu-text">Logout</span>}
+        </button>
+      </div>
     </div>
   );
 };

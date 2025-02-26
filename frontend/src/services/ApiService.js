@@ -122,6 +122,17 @@ class ApiService {
   async delete(endpoint) {
     return this.request("delete", endpoint);
   }
+
+  // Logout Request
+  async logout() {
+    try {
+      await this.post("/auth/logout");
+      this.clearTokens();
+      window.location.href = "/login";
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  }
 }
 
 // Export a Singleton Instance

@@ -1,107 +1,139 @@
-/* procurementDashboard.css */
-
 body {
-    font-family: Arial, sans-serif;
-  }
-  
-  .procurement-dashboard-container {
-    display: flex;
-    height: 100vh;
-  }
-  
-  .procurement-sidebar {
-    background-color: #2c3e50;
-    color: #ecf0f1;
-    width: 250px;
-    transition: width 0.3s;
-    overflow: hidden;
-  }
-  
-  .procurement-sidebar.collapsed {
-    width: 80px;
-  }
-  
-  .procurement-sidebar-toggle {
-    display: flex;
-    justify-content: flex-end;
-    padding: 10px;
-  }
-  
-  .procurement-sidebar-toggle button {
-    background-color: transparent;
-    border: none;
-    color: #ecf0f1;
-    font-size: 24px;
-    cursor: pointer;
-  }
-  
-  .procurement-sidebar-menu {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .procurement-sidebar-item {
-    padding: 15px 20px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .procurement-sidebar-item:hover,
-  .procurement-sidebar-item.active {
-    background-color: #34495e;
-  }
-  
-  .procurement-sidebar-item .icon {
-    font-size: 24px;
-    margin-right: 20px;
-  }
-  
-  .procurement-sidebar.collapsed .procurement-sidebar-item .icon {
-    margin-right: 0;
-  }
-  
-  .procurement-sidebar.collapsed .menu-text {
-    display: none;
-  }
-  
-  .procurement-content-container {
-    flex-grow: 1;
-    padding: 20px;
-    overflow-y: auto;
-  }
-  
-  .procurement-card {
-    background-color: #ffffff;
-    border: 1px solid #dcdcdc;
-    border-radius: 5px;
-    padding: 20px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
-  
-  /* Mobile responsive styles */
-  @media (max-width: 768px) {
-    .procurement-dashboard-container {
-      flex-direction: column;
-    }
-  
-    .procurement-sidebar {
-      width: 100%;
-      height: auto;
-    }
-  
-    .procurement-sidebar.collapsed {
-      width: 100%;
-    }
-  
-    .procurement-sidebar-toggle {
-      justify-content: center;
-    }
-  
-    .procurement-content-container {
-      padding: 10px;
-    }
-  }
-  
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f5f7;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+.procurement-dashboard-container {
+  display: flex;
+  height: 100vh;
+}
+
+.procurement-sidebar {
+  display: flex;
+  flex-direction: column;
+  background-color: #2c3e50;
+  color: white;
+  transition: width 0.3s;
+}
+
+.procurement-sidebar.expanded {
+  width: 250px;
+}
+
+.procurement-sidebar.collapsed {
+  width: 80px;
+}
+
+.procurement-sidebar-toggle {
+  display: flex;
+  justify-content: flex-end;
+  padding: 15px;
+  background-color: #1a252f;
+}
+
+.user-avatar-container {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  transition: padding 0.3s;
+}
+
+.user-avatar-container.expanded {
+  background-color: #34495e;
+}
+
+.user-avatar-container.collapsed {
+  background-color: #2c3e50;
+  justify-content: center;
+}
+
+.avatar {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.user-name {
+  color: #ecf0f1;
+  font-size: 1em;
+}
+
+.procurement-sidebar-menu {
+  flex-grow: 1;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.procurement-sidebar-item {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.procurement-sidebar-item:hover,
+.procurement-sidebar-item.active {
+  background-color: #34495e;
+}
+
+.icon {
+  margin-right: 15px;
+}
+
+.menu-text {
+  display: inline-block;
+}
+
+.procurement-sidebar-logout {
+  padding: 15px;
+  text-align: center;
+  background-color: #1a252f;
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+  background-color: #e74c3c;
+}
+
+.procurement-content-container {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: #f1f3f6;
+  overflow-y: auto;
+}
+
+.procurement-card {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.procurement-card-title {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+  color: #34495e;
+}
+
+.procurement-card-content {
+  font-size: 1em;
+  color: #7f8c8d;
+}
