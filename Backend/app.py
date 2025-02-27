@@ -3,7 +3,7 @@ from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS 
-from models import db  
+from models import db
 from routes.auth_routes import auth_routes
 from routes.asset_routes import asset_bp  
 from routes.request_routes import request_routes
