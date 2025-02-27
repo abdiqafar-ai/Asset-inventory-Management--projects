@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://127.0.0.1:5000/api"; // Flask Backend URL
+// Use the REACT_APP_API_URL environment variable (set in Vercel) and fallback to local dev if undefined.
+const API_BASE_URL = (process.env.REACT_APP_API_URL || "http://127.0.0.1:5000") + "/api";
+ // Flask Backend URL
 
 class ApiService {
   constructor() {
