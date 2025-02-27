@@ -12,7 +12,10 @@ const EmployeeNotificationsView = ({ data }) => {
   };
 
   const markAsRead = async (notificationId, e) => {
-    e?.stopPropagation();
+    if (e) {
+      e.stopPropagation();
+    }
+
     try {
       const response = await apiService.put(
         `/notifications/${notificationId}/read`
@@ -31,7 +34,10 @@ const EmployeeNotificationsView = ({ data }) => {
   };
 
   const deleteNotification = async (notificationId, e) => {
-    e?.stopPropagation();
+    if (e) {
+      e.stopPropagation();
+    }
+
     try {
       const response = await apiService.delete(
         `/notifications/${notificationId}`
