@@ -29,11 +29,13 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "preinstall": "npx npm-force-resolutions"
   },
-  "overrides": {
-    "cross-spawn": "7.0.3"
+  "resolutions": {
+    "cross-spawn": "6.0.5"
   },
+
   "eslintConfig": {
     "extends": [
       "react-app",
