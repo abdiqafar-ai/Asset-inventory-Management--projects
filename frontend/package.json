@@ -31,8 +31,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "preinstall": "npx npm-force-resolutions",
-    "postinstall": "npm rebuild"
+    "preinstall": "npx npm-force-resolutions"
   },
   "resolutions": {
     "cross-spawn": "6.0.5",
