@@ -1,0 +1,147 @@
+/* Main container to center the form */
+.signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f1f5f8; /* Light gray background */
+  padding: 20px;
+}
+
+/* Form container with padding and shadow */
+.signup-form-container {
+  background-color: #ffffff; /* White background for form */
+  border-radius: 12px; /* Slightly more rounded corners */
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  width: 100%;
+  max-width: 700px; /* Increased form width */
+  text-align: left; /* Align text to the left */
+}
+
+/* Header styling for form */
+.signup-form-container h2 {
+  font-size: 2rem;
+  color: #023047; /* Dark blue */
+  margin-bottom: 20px;
+  font-family: 'Urbanist', sans-serif;
+  font-weight: 600; /* Slightly lighter than bold */
+  text-align: center; /* Keep the header centered */
+}
+
+/* Styling for each form group */
+.form-group {
+  margin-bottom: 20px;
+}
+
+/* Labels for inputs */
+.form-group label {
+  display: block;
+  font-size: 1.1rem;
+  color: #023047; /* Dark blue */
+  margin-bottom: 8px;
+  text-align: left; /* Ensure labels align to the left */
+}
+
+/* Input fields and select dropdown */
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 14px;
+  font-size: 1rem;
+  border: 1px solid #219ebc; /* Light blue border */
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+/* Focus state for inputs */
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #023047; /* Dark blue focus border */
+  box-shadow: 0 0 5px rgba(2, 48, 71, 0.3); /* Subtle shadow effect on focus */
+}
+
+/* Custom select dropdown style */
+.form-group select {
+  text-transform: uppercase; /* Make the role options uppercase */
+}
+
+/* Sign-up button styling */
+.signup-button {
+  width: 100%;
+  padding: 14px;
+  font-size: 1.1rem;
+  background-color: #219ebc; /* Light blue background */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Hover effect for sign-up button */
+.signup-button:hover {
+  background-color: #023047; /* Dark blue on hover */
+  transform: scale(1.05); /* Slight hover effect */
+}
+
+/* Styling for "Already have an account" link */
+.existing-account {
+  font-size: 1rem;
+  margin-top: 20px;
+  color: #023047; /* Dark blue */
+}
+
+/* Link styling */
+.existing-account a {
+  color: #219ebc; /* Light blue link color */
+  text-decoration: none;
+}
+
+/* Hover effect for link */
+.existing-account a:hover {
+  text-decoration: underline;
+  color: #023047; /* Dark blue on hover */
+}
+
+/* Mobile View Adjustments */
+@media (max-width: 768px) {
+  .signup-form-container {
+    padding: 30px;
+  }
+
+  .signup-form-container h2 {
+    font-size: 1.8rem;
+  }
+
+  .form-group input,
+  .form-group select {
+    padding: 12px;
+  }
+
+  .signup-button {
+    padding: 12px;
+  }
+}
+
+/* Style for the password input container and toggle icon */
+.password-input-container {
+  position: relative;
+}
+
+/* Button styling for toggling password visibility */
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.password-toggle svg {
+  color: gray; /* Light blue icon color */
+  font-size: 1.4rem;
+}

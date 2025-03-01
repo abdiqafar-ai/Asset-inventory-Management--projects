@@ -1,0 +1,136 @@
+/* General container */
+.about-us-container {
+  font-family: 'Arial', sans-serif;
+  background-color: #031C2A;
+  color: #E5F4FD;
+  padding: 20px 15px;
+}
+
+/* About Us Header */
+.about-us-header {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #023047; /* Primary color */
+  color: white; /* White text */
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+.about-us-header h1 {
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.about-us-header p {
+  font-size: 1.2rem;
+  max-width: 800px;
+  margin: 20px auto;
+  font-weight: 400;
+}
+
+/* About Us Content */
+.about-us-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.about-us-content h2 {
+  font-size: 2rem;
+  color: whitesmoke;
+  margin-top: 30px;
+  font-weight: bold;
+}
+
+.about-us-content p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  font-weight: 400;
+}
+
+.about-us-content ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.about-us-content ul li {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.about-us-content ul li strong {
+  color: whitesmoke;
+}
+
+/* Why We Are Different Section */
+.why-we-are-different {
+  background-color: #023047;
+  padding: 40px 20px;
+  border-radius: 8px;
+  margin-top: 30px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Soft shadow for depth */
+}
+
+.why-we-are-different h2 {
+  font-size: 2.5rem;
+  color: #E5F4FD;
+  margin-bottom: 20px;
+}
+
+.why-we-are-different p {
+  font-size: 1.1rem;
+  color: #E5F4FD;
+  margin-bottom: 30px;
+}
+
+.difference-box {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.difference-item {
+  background-color: #00B4D8;
+  padding: 30px;
+  border-radius: 10px;
+  max-width: 300px;
+  text-align: center;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin: 10px;
+}
+
+.difference-item:hover {
+  transform: translateY(-10px); /* Hover effect */
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow on hover */
+}
+
+.difference-logo {
+  color: #023047;
+  margin-bottom: 15px;
+}
+
+.difference-item h3 {
+  font-size: 1.6rem;
+  color: #023047;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.difference-item p {
+  font-size: 1rem;
+  color: #023047;
+  line-height: 1.5;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .difference-box {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
