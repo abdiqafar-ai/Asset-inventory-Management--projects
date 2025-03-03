@@ -10,6 +10,7 @@ const AssetsView = () => {
   // Asset management states
   const [assets, setAssets] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [showAssets, setShowAssets] = useState(false);
   const [newAsset, setNewAsset] = useState({
     name: "",
     description: "",
@@ -90,7 +91,15 @@ const AssetsView = () => {
   const fetchAssetsByCategory = async (categoryId) => {
     setLoading(true);
     setError("");
+    if (selectedCategory === categoryId && showAssets) {
+      setShowAssets(false);
+      setSelectedCategory(null);
+      setAssets([]);
+      setLoading(false);
+      return;
+    }
     setSelectedCategory(categoryId);
+    setShowAssets(true);
     try {
       const result = await apiService.get(`/assets/category/${categoryId}`);
       setAssets(result);
@@ -189,7 +198,9 @@ const AssetsView = () => {
                   className="category-btn btn-view"
                   onClick={() => fetchAssetsByCategory(category.id)}
                 >
-                  View
+                  {selectedCategory === category.id && showAssets
+                    ? "Hide"
+                    : "View"}
                 </button>
                 <button
                   className="category-btn btn-delete"
@@ -214,7 +225,7 @@ const AssetsView = () => {
       </div>
 
       {/* Asset Management (when a category is selected) */}
-      {selectedCategory && (
+      {showAssets && selectedCategory && (
         <div className="assets-panel assets-card">
           <h3>
             Assets in {categories.find((c) => c.id === selectedCategory)?.name}
