@@ -5,6 +5,7 @@
  align-items: center; /* Center-align everything */
  gap: 30px; /* Add space between items */
  padding: 30px;
+ width:100%;
  font-family: 'Helvetica Neue', Arial, sans-serif;
  background-color: #fafafa;
 }
