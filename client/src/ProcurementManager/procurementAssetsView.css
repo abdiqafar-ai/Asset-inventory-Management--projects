@@ -1,296 +1,217 @@
-/* General Styles */
-.assets-view-container,
-.procurement-assets-container {
- display: flex;
- flex-direction: column; /* Stack elements vertically */
- align-items: center; /* Center-align everything */
- gap: 30px; /* Add space between items */
- padding: 30px;
- font-family: 'Helvetica Neue', Arial, sans-serif;
- background-color: #fafafa;
-}
-
-/* Card Styles */
 .procurement-card {
- background: #ffffff;
- border-radius: 12px;
- box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
- padding: 30px;
- width: 100%; /* Ensure the card takes full width */
- max-width: 900px; /* Restrict card width */
- transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-}
-
-.procurement-card:hover {
- transform: translateY(-5px);
- box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+  background: #f9f9f9;
 }
 
 .procurement-card-title {
- font-size: 1.75em;
- font-weight: 600;
- margin-bottom: 20px;
- color: #333333;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
 }
 
+.procurement-loading,
 .procurement-error-message {
- color: #e74c3c;
- font-size: 1.1em;
- margin-top: 10px;
+  text-align: center;
+  font-size: 18px;
+  color: #ff0000;
 }
 
-/* Category Grid */
 .procurement-list {
- list-style: none;
- padding: 0;
- display: flex;
- flex-wrap: wrap;
- gap: 20px;
- margin-bottom: 20px;
- justify-content: center;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
 }
 
 .procurement-list-item {
- background: #f8f8f8;
- border-radius: 12px;
- padding: 20px;
- text-align: center;
- flex-basis: 48%; /* Two cards per row */
- box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
- transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-}
-
-.procurement-list-item:hover {
- transform: translateY(-5px);
- box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 200px;
+  height: 200px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
 }
 
 .procurement-category-name {
- font-size: 1.4em;
- margin-bottom: 12px;
- color: #333333;
+  font-size: 18px;
+  color: #333;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
-/* Button Styles */
+.procurement-category-buttons {
+  display: flex;
+  gap: 10px;
+}
+
 .procurement-btn {
- background: #4CAF50;
- border: none;
- border-radius: 8px;
- color: white;
- padding: 12px 20px;
- cursor: pointer;
- transition: background-color 0.2s ease;
- font-size: 1.1em;
- margin: 5px 0;
- width: 100%;
- max-width: 200px;
- text-align: center;
-}
-
-.procurement-btn:hover {
- background: #388E3C;
-}
-
-.procurement-btn-delete {
- background: #FF5733;
-}
-
-.procurement-btn-delete:hover {
- background: #D43F00;
-}
-
-.procurement-btn-view {
- background: #2ecc71;
-}
-
-.procurement-btn-view:hover {
- background: #27ae60;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .procurement-btn-primary {
- background: #1abc9c;
-}
-
-.procurement-btn-primary:hover {
- background: #16a085;
+  background-color: #007bff;
+  color: #fff;
 }
 
 .procurement-btn-secondary {
- background: #95a5a6;
+  background-color: #01325e;
+  color: #fff;
 }
 
-.procurement-btn-secondary:hover {
- background: #7f8c8d;
+.procurement-btn-view {
+  background-color: #28a745;
+  color: #fff;
 }
 
-/* Add Category and Add Asset Forms */
-.procurement-add-category-form, .procurement-add-form, .procurement-update-form, .procurement-assign-form {
- display: flex;
- flex-direction: column;
- gap: 20px;
- width: 100%;
- max-width: 600px; /* Limit form width */
- margin: 0 auto; /* Center forms */
+.procurement-btn-delete {
+  background-color: #dc3545;
+  color: #fff;
 }
 
-.procurement-add-category-input, .procurement-add-input, .procurement-update-input, .procurement-assign-select {
- padding: 14px;
- border: 1px solid #ccc;
- border-radius: 8px;
- width: 100%;
- font-size: 1.1em;
- transition: border-color 0.2s;
+.procurement-add-category-form {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
-.procurement-add-category-input:focus, .procurement-add-input:focus, .procurement-update-input:focus, .procurement-assign-select:focus {
- border-color: #4CAF50;
+.procurement-add-category-input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-right: 10px;
+  width: 300px;
 }
 
-/* Button Placement in Forms */
-.procurement-add-category-form button, .procurement-add-form button, .procurement-update-form button, .procurement-assign-form button {
- align-self: flex-start;
- font-size: 1.2em;
- padding: 12px 25px;
- border-radius: 8px;
- background-color: #4CAF50;
- color: white;
- border: none;
- cursor: pointer;
- transition: background-color 0.2s;
+.procurement-assets-container {
+  margin-top: 60px;
+  text-align: center;
+
 }
 
-.procurement-add-category-form button:hover, .procurement-add-form button:hover, .procurement-update-form button:hover, .procurement-assign-form button:hover {
- background-color: #388E3C;
+.procurement-assets-title {
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-/* Button Group: 2 Buttons per Row */
+.procurement-add-form-container {
+  margin-bottom: 20px;
+}
+
+.procurement-add-form-title {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.procurement-add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.procurement-add-input {
+  padding: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 100%;
+  font-size: 1.1em;
+  transition: border-color 0.2s;
+}
+
+.procurement-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.procurement-asset-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  object-fit: contain;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 20px;
+  overflow: hidden;
+  flex-basis: calc(50% - 10px); 
+}
+
+.procurement-asset-image {
+  max-width: 100%;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.procurement-asset-name {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.procurement-asset-description,
+.procurement-asset-status {
+  font-size: 14px;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
 .button-group {
- display: flex;
+  display: flex;
  gap: 15px;
  flex-wrap: wrap;
  margin-top: 15px;
  justify-content: space-between;
 }
 
-.button-group button {
- flex: 1 1 calc(50% - 15px); /* Two buttons per row with a gap */
- max-width: 200px; /* Optional: limit max width */
-}
-
-/* Error Styling */
-.procurement-error-message {
- color: #e74c3c;
- font-size: 1.1em;
- margin-top: 15px;
-}
-
-/* Assets Grid */
-.procurement-grid {
- display: grid;
- grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
- gap: 1.5rem;
-}
-
-/* Asset Card */
-.procurement-asset-card {
- background: #2c3e50;
- color: #ecf0f1;
- border-radius: 12px;
- padding: 1.5rem;
- transition: box-shadow 0.3s ease;
- position: relative;
-}
-
-.procurement-asset-card:hover {
- box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
-}
-
-.procurement-asset-image {
- width: 100%;
- height: 220px;
- object-fit: cover;
- border-radius: 8px;
- margin-bottom: 1rem;
-}
-
-.procurement-asset-name {
- font-size: 1.4rem;
- margin-bottom: 0.5rem;
- color: #ecf0f1;
-}
-
-/* Button Group */
-.button-group {
- display: flex;
- flex-wrap: wrap;
- gap: 1rem;
- margin-top: 1rem;
- justify-content: center;
-}
-
-/* Inline Update & Assign Forms */
 .procurement-update-form,
-.procurement-assign-form {
- background: #f8f9fa;
- padding: 1.5rem;
- border-radius: 10px;
- margin-top: 1rem;
- color: #2c3e50;
- box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+.procurement-assign-form,
+.procurement-allocation-info {
+  margin-top: 20px;
+  text-align: left;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.procurement-update-title,
+.procurement-assign-title,
+.procurement-allocation-title {
+  font-size: 20px;
+  margin-bottom: 10px;
 }
 
 .procurement-update-input,
-.procurement-update-form select,
-.procurement-assign-form select {
- width: 100%;
- padding: 0.8rem;
- margin-bottom: 1rem;
- border: 1px solid #ddd;
- border-radius: 6px;
- font-size: 1rem;
+.procurement-assign-select {
+  width: calc(100% - 20px);
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 10px;
 }
 
-.procurement-update-input:focus,
-.procurement-update-form select:focus,
-.procurement-assign-form select:focus {
- outline: none;
- border-color: #3498db;
- box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-}
-
-/* Allocation Info */
-.procurement-allocation-info {
- background: #f8f9fa;
- padding: 1.5rem;
- border-radius: 10px;
- margin-top: 1rem;
- color: #2c3e50;
-}
-
-.procurement-allocation-title {
- margin-top: 0;
- font-size: 1.4rem;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
- .procurement-list-item {
- flex: 1 1 100%;
- }
- .procurement-grid {
- grid-template-columns: 1fr;
- }
- .button-group {
- flex-direction: column;
- }
-}
-
-@media (max-width: 480px) {
- .procurement-card {
- padding: 1rem;
- }
- .procurement-card-title,
- .procurement-card h3 {
- font-size: 20px;
- }
+.procurement-allocation-text {
+  font-size: 14px;
 }

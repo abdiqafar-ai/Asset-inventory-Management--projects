@@ -47,6 +47,7 @@ body {
   display: flex;
   align-items: center;
   padding: 15px;
+  gap: 15px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -57,7 +58,10 @@ body {
 }
 
 .icon {
-  margin-right: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px; /* Ensures consistent icon spacing */
 }
 
 .menu-text {
@@ -81,6 +85,9 @@ body {
   color: white;
   cursor: pointer;
   transition: background-color 0.3s;
+  gap: 10px; /* Adds space between icon and text */
+  padding: 10px;
+  border-radius: 4px;
 }
 
 .logout-button:hover {
